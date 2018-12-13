@@ -7,7 +7,7 @@ _________
 # library prep methods:
 
 | kit | Description | Paired | Stranded | Strand according to mRNA | Strand according to `first strand`|
-| --- | --- | --- | --- | --- 
+| --- | --- | --- | --- | --- | ---
 | TruSeq RNA Sample Prep kit  | | yes | No | | fr-unstranded |
 | SMARTer ultralow RNA protocol | | yes | No | | fr-unstranded |
 | All dUTP methods, NSR, NNSR | | yes | Yes | RF | fr-firststrand 
