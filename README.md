@@ -2,7 +2,7 @@
 An efficient way to guess the library type of your RNA-Seq data.
 _________
 
- <img align="center" src="https://github.com/NBISweden/GAAS/edit/master/annotation/CheatSheet/pictures/library_types.jpg"/>
+![](https://github.com/NBISweden/GAAS/edit/master/annotation/CheatSheet/pictures/library_types.jpg)
 
 # library prep methods:
 
