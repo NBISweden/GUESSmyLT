@@ -2,25 +2,30 @@
 An efficient way to guess the library type of your RNA-Seq data.
 _________
 
-
+ <img align="center" src="https://github.com/NBISweden/GAAS/edit/master/annotation/CheatSheet/pictures/library_types.jpg"/>
 
 # library prep methods:
 
-| kit | Description | Paired | Stranded | Strand
+| kit | Description | Paired | Stranded | Strand according to mRNA | Strand according to `first strand`|
 | --- | --- | --- | --- | --- 
-| TruSeq RNA Sample Prep kit  | | yes | No | Both
-| SMARTer ultralow RNA protocol | | yes | No | Both
-| All dUTP methods, NSR, NNSR | | yes | Yes | first
-| TruSeq Stranded Total RNA Sample Prep Kit | | yes | Yes | first
-| TruSeq Stranded mRNA Sample Prep Kit | | yes | Yes | first
-| NEB Ultra Directional RNA Library Prep Kit | | yes | Yes | first
-| Agilent SureSelect Strand-Specific | | yes | Yes | first
-| Directional Illumina (Ligation) | | yes | Yes | second
-| Standard SOLiD | | Yes | yes | second
-| ScriptSeq v2 RNA-Seq Library Preparation Kit | | yes | Yes | second
-| SMARTer Stranded Total RNA | | yes | Yes | second 
-| Encore Complete RNA-Seq Library Systems  | | yes | Yes | second
-| NuGEN SoLo  | | yes | Yes | second
+| TruSeq RNA Sample Prep kit  | | yes | No | | fr-unstranded |
+| SMARTer ultralow RNA protocol | | yes | No | | fr-unstranded |
+| All dUTP methods, NSR, NNSR | | yes | Yes | RF | fr-firststrand 
+| TruSeq Stranded Total RNA Sample Prep Kit | | yes | Yes | RF | fr-firststrand 
+| TruSeq Stranded mRNA Sample Prep Kit | | yes | Yes | RF | fr-firststrand 
+| NEB Ultra Directional RNA Library Prep Kit | | yes | Yes | RF | fr-firststrand 
+| Agilent SureSelect Strand-Specific | | yes | Yes | RF | fr-firststrand 
+| Directional Illumina (Ligation) | | yes | Yes | FR | fr-secondstrand
+| Standard SOLiD | | Yes | yes | FR | fr-secondstrand
+| ScriptSeq v2 RNA-Seq Library Preparation Kit | | yes | Yes | FR | fr-secondstrand
+| SMARTer Stranded Total RNA | | yes | Yes | FR | fr-secondstrand 
+| Encore Complete RNA-Seq Library Systems  | | yes | Yes | FR | fr-secondstrand
+| NuGEN SoLo  | | yes | Yes | FR | fr-secondstrand
+| Illumina ScriptSeq| |  yes | Yes | FR | fr-secondstrand
+| SOLiD mate-pair protocol | | | | | ff
+
+--rf orientation are produced using the Illumina mate-pair protocol.?
+
 
 # External ressources:
 
