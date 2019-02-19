@@ -4,18 +4,22 @@ from setuptools import setup, find_packages
 import sys, os, json, subprocess
 
 print("Trying to download BUSCO datasets from https://busco.ezlab.org")
+# Use wget for linux and curl for other (macOS)
+download_comm = 'wget -q0-'
+if sys.platform!='linux': download_comm='curl'
 print("Checking for eukaroyte dataset:")
 if os.path.exists("GUESSmyLT/eukaryota_odb9"):
     print("Eukaryote dataset seems to exist")
 else:
     print("No eukaryote dataset found, downloading...")
-    os.system("wget -qO- https://busco.ezlab.org/datasets/eukaryota_odb9.tar.gz | tar xvz -C ./GUESSmyLT")
+    print("Trying to download using wget or curl...")
+    os.system(download_comm + " https://busco.ezlab.org/datasets/eukaryota_odb9.tar.gz | tar xvz -C ./GUESSmyLT")
 print("Checking for prokaryote dataset:")
 if os.path.exists("GUESSmyLT/bacteria_odb9"):
     print("Prokaryote dataset seems to exist")
 else:
     print("No prokaryote dataset found, downloading...")
-    os.system("wget -qO- https://busco.ezlab.org/datasets/bacteria_odb9.tar.gz | tar xvz -C ./GUESSmyLT")
+    os.system(download_comm + " https://busco.ezlab.org/datasets/bacteria_odb9.tar.gz | tar xvz -C ./GUESSmyLT")
 
 script_dir=os.getcwd() + "/"
 config_path = script_dir+"GUESSmyLT/config.json"
