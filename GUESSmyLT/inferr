@@ -1,0 +1,22 @@
+# Snakefile for ruuning the inferringscript 'inferr.py' which figures out the library-type
+import re, os
+script_dir=os.path.dirname(__file__)
+configfile: "config.json"
+folder = "intermediate_data/"
+reference=re.split(".fa|.fasta",os.path.basename(config["trinity"]["reference"]))[0]
+mapped_reads=config["bowtie2"]["mapped-reads"]
+readname=config["input"]["readname"]
+readpath=config["input"]["reads"][0]
+script_dir=config["script_dir"]
+
+PE_SE="paired" if len(config["input"]["reads"])==2 else "single"
+
+rule inferr:
+    input:
+        config["busco"]["annotation"],
+        config["bowtie2"]["mapped-reads"],
+        rules.subsample.output
+    output:
+        'result_{readname}_on_{reference}.txt'
+    shell:
+        "python {script_dir}/inferr_lib.py {reference}  {mapped_reads} {readname} {readpath} {PE_SE} "

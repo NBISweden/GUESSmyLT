@@ -1,0 +1,47 @@
+# Snakefile for checking that required programs can be run.
+# Will exit if samtools, bowtie2 or BUSCO can't be run.
+# Will warn but not exit if Trinity can't be run
+
+import time
+
+rule check_programs:
+    output:
+        touch("programs.checked")
+    priority: 2
+    run:
+        try:
+            print("Checking for bowtie2, upon error make sure it's installed properly")
+            shell("bowtie2 -h >/dev/null")
+            print("Bowtie2 works, continuing...\n")
+        except OSError:
+            pass
+        try:
+            print("Checking for BUSCO, upon error make sure it's installed properly")
+            shell("run_busco -h >/dev/null")
+            print("BUSCO works, continuing...\n")
+        except OSError:
+            pass
+        try:
+            print("Checking for samtools, upon error make sure it's installed properly")
+            shell("samtools sort >/dev/null")
+            print("Samtools works, continuing...\n")
+        except OSError:
+            pass
+        try:
+            print("Checking for Trinity")
+            #Trinity gives error code 255 instead of 0
+            shell("""
+            set +e
+            Trinity
+            exitcode=$?
+            if [ $exitcode -eq 255 ]
+            then
+                exit 0
+            else
+                exit 1
+            fi
+            """)
+            print("Trinity works, continuing...\n")
+        except:
+            print("Trinity not found, please install if you plan or running without a reference.\nContinuing in 5 seconds...")
+            time.sleep(5)

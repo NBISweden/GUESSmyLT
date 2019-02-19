@@ -1,0 +1,32 @@
+{
+    "input": {
+        "to_subsample": [
+            "/home/hampus/Downloads/4_mapped_r1.fastq",
+            "/home/hampus/Downloads/4_mapped_r2.fastq"
+        ],
+        "reads": [
+            "/home/hampus/test/intermediate_data/4_mapped_r1.sub.100000.fastq.gz",
+            "/home/hampus/test/intermediate_data/4_mapped_r2.sub.100000.fastq.gz"
+        ],
+        "readname": "4_mapped_r1.sub.100000",
+        "organism": "eukaryote",
+        "threads": 10,
+        "memory": "8G"
+    },
+    "bowtie2": {
+        "mapped-reads": "intermediate_data/4_mapped_r1.sub.100000_on_ref_4_sorted.bam"
+    },
+    "busco": {
+        "lineage": "/home/hampus/GUESSmyLT/GUESSmyLT/eukaryota_odb9",
+        "mode": "genome",
+        "annotation": "intermediate_data/run_4"
+    },
+    "trinity": {
+        "reference": "/home/hampus/GUESSmyLT/data/input/4.fa"
+    },
+    "subsample": 100000,
+    "output": "/home/hampus/test/",
+    "script_dir": "/home/hampus/GUESSmyLT/GUESSmyLT/",
+    "eukaryote_db": "/home/hampus/GUESSmyLT/GUESSmyLT/eukaryota_odb9",
+    "prokaryote_db": "/home/hampus/GUESSmyLT/GUESSmyLT/bacteria_odb9"
+}

@@ -1,0 +1,36 @@
+# Execute with "snakemake -s trinity ../intermediate_data/trinity"
+
+configfile: "config.json"
+
+def PE_SE_trinity_command():
+    if len(config["input"]["reads"])==2:
+        return " --left "+config["input"]["reads"][0]+" --right "+config["input"]["reads"][1]+" "
+    elif len(config["input"]["reads"])==1:
+        return " --single "+config["input"]["reads"][0]+" "
+    else:
+        raise(Exception("Reads should be paired or single ended."))
+
+readname=config["input"]["readname"]
+
+rule trinity:
+    input:
+        rules.subsample.output
+    output:
+        trinitydir=directory("intermediate_data/trinity"),
+        renamed="intermediate_data/"+readname+".fasta"
+    params:
+        memory=config["input"]["memory"]
+    threads:
+        config["input"]["threads"]
+    log:
+        "logs/trinity_assembly.log"
+    run:
+        shell("Trinity \
+        --seqType fq \
+        --max_memory {params.memory}\
+        "+PE_SE_trinity_command()+"\
+        --CPU {threads} \
+        --output {output.trinitydir} \
+        | tee {log}")
+        shell("mv intermediate_data/trinity/Trinity.fasta {output.renamed}")
+        shell("echo Renamed $(dirname $PWD)/intermediate_data/trinity/Trinity.fasta to $(dirname $PWD)/intermediate_data/"+readname+".fasta | tee --append {log}")

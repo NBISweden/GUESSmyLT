@@ -1,0 +1,58 @@
+# Need samtools and bowtie2 in path to work.
+# Execute with command: snakemake -s bowtie2 ../intermediate_data/[run_name]_sorted.bam
+
+import re
+configfile: "config.json"
+
+
+def mapping_bowtie2_command():
+    if len(config["input"]["reads"])==2:
+        return " -1 "+config["input"]["reads"][0]+" -2 "+config["input"]["reads"][1]+" "
+    elif len(config["input"]["reads"])==1:
+        return " -U "+config["input"]["reads"][0]+" "
+    else:
+        raise(Exception("Reads should be paired or single ended."))
+
+# path to index file without extension (removed .fa or .fasta)
+folder = "intermediate_data/"
+index_basename=folder+"index/"+re.split('/|\.',config["trinity"]["reference"])[-2]
+sample=config["input"]["readname"]+"_on_ref_"+re.split('/|\.',config["trinity"]["reference"])[-2]
+
+rule bowtie2_index:
+    input:
+        config["trinity"]["reference"]
+    output:
+        expand(index_basename+".{index}.bt2", index=range(1,5)),
+        expand(index_basename+".rev.{index}.bt2", index=range(1,3))
+    log:
+        "logs/bowtie2_index_"+sample+".log"
+    threads:
+        config["input"]["threads"]
+    run:
+        shell("bowtie2-build --threads {threads} {input} "+index_basename+" | tee {log}")
+
+rule bowtie2_map:
+    input:
+        # Indexed files
+        expand(index_basename+".{index}.bt2", index=range(1,5)),
+        expand(index_basename+".rev.{index}.bt2", index=range(1,3)),
+        # Read files
+        rules.subsample.output
+    output:
+        #folder+"{sample}_sorted.bam"
+        folder+sample+"_sorted.bam"
+    threads:
+        config["input"]["threads"]
+    log:
+        #"logs/bowtie2_map_{sample}.log"
+        "logs/bowtie2_map_"+sample+".log"
+    run:
+        shell("bowtie2 \
+        -x {index_basename} \
+        "+mapping_bowtie2_command()+"\
+        --threads {threads} \
+        2> >(tee {log} >&2) \
+        | samtools view -bS - > {folder}"+sample+"_mapped.bam \n \
+        samtools sort {folder}"+sample+"_mapped.bam > {output} \n \
+        samtools index {output} \n \
+        rm {folder}"+sample+"_mapped.bam")
