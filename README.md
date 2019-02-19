@@ -239,7 +239,7 @@ GUESSmyLT/data/intermediate/
 
 ## External resources:
 
-![alt text](https://github.com/NBISweden/GAAS/edit/master/annotation/CheatSheet/pictures/library_types.jpg)
+![alt text](https://github.com/NBISweden/GAAS/blob/master/annotation/CheatSheet/pictures/library_types.jpg)
 
 [https://chipster.csc.fi/manual/library-type-summary.html](https://chipster.csc.fi/manual/library-type-summary.html)
 [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)
