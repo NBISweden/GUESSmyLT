@@ -5,7 +5,7 @@ import sys, os, json, subprocess
 
 print("Trying to download BUSCO datasets from https://busco.ezlab.org")
 # Use wget for linux and curl for other (macOS)
-download_comm = 'wget -q0-'
+download_comm = 'wget -qO-'
 if sys.platform!='linux': download_comm='curl'
 print("Checking for eukaroyte dataset:")
 if os.path.exists("GUESSmyLT/eukaryota_odb9"):
