@@ -70,16 +70,13 @@ def check_mapped():
     sys.exit()
 
 
-def check_reference(ref):
+def check_reference(ref,mode):
     """
     Checks that provided reference is valid according to:
         1. Can be opened.
         2. Has at least one line that begins with '>'.
 
-    Also checks if we are dealing with genome or transcriptome by looking at
-    the number of lines that begin with '>'.
-    If one line begins with '>' we are dealing with genome.
-    If more than one line begin with '>' we are dealing with transcriptome.
+    Also checks if we are dealing with genome or transcriptome by looking at the provided option
     """
     try:
         open(ref)
@@ -92,22 +89,24 @@ def check_reference(ref):
         zip_command="cat"
     num_headers=subprocess.check_output(
     zip_command+" "+ref+" | grep '^>' | wc -l",
-    shell=True,
-    encoding="utf8")
-    if int(num_headers.split("\n")[0]) > 1:
-        # Multiple headers --> dealing with transcriptome.
-        # So far we return genome anyway because we have not optimized busco for transcriptome.
-        # Need to optimize busco script!
-        # This is however a later improvement since we can lie to busco that we are dealing with genome.
-        #return "transcriptome"
-        return "genome"
-    elif int(num_headers.split("\n")[0])==1:
-        # One header --> dealing with genome.
-        return "genome"
-    else:
+    shell=True)
+
+    if int(str(num_headers.decode("utf-8")).split("\n")[0]) == 0:
         print("Error. Reference file is not in fasta format. Missing '>' in beginning of fasta header.")
         sys.exit()
 
+    #check that the mode asked exists
+    if not mode:
+        print("Mode parameter must be filled when a fasta reference file is provided. It must be <genome> or <transcriptome>.")
+        sys.exit()
+    if (mode.lower() == "genome"):
+        return "genome"
+    elif (mode.lower() == "transcriptome"):
+        print("Transcriptome mode is not yet implemented.")
+        sys.exit()
+    else:
+        print("Mode "+mode+" doesn't exits. It must be <genome> or <transcriptome>.")
+        sys.exit()
 
 def check_memory(args):
     """
@@ -139,9 +138,10 @@ def main():
     required.add_argument("--reads",nargs="+",type=str,help="One or two read files in .fastq format. Files can be compressed or uncrompressed. Handles interleaved read files and any known .fastq header format. ")
     optional.add_argument("--subsample",type=int,default=100000,help="Number of subsampled reads that will be used for analysis. Must be an even number. Default value is 100,000 reads.")
     optional.add_argument("--reference",type=str,help="Reference file in .fasta format. Reference can be either transcriptome or genome.")
+    optional.add_argument("--mode",type=str,help="Mode can be genome or transcriptome. It defines how the reference fasta file will be handled by BUSCO. Only genome mode is implemented currently.")
     optional.add_argument("--annotation",type=str,help="Annotation file in .gff format. Needs to contain genes. Not implemented yet.")
     optional.add_argument("--mapped",type=str,help="Mapped file in sorted .bam format. Reference that reads have been mapped to has to be provided. Checker for this has not been developed yet. Therefore, do not provide a mapping file.") #Maybe add this?
-    optional.add_argument("--threads", type=int, default=10,help="The number of threads that can be used by GUESSmyLT. Needs to be an integer. Defualt value is 10.")
+    optional.add_argument("--threads", type=int, default=2,help="The number of threads that can be used by GUESSmyLT. Needs to be an integer. Defualt value is 10.")
     optional.add_argument("--memory",type=str, default="8G",help="Maximum memory that can be used by GUESSmyLT in GB. E.g. '10G'. Default value is 8G.")
     optional.add_argument("--output",type=str,default=working_dir,help="Full path to output directory. Default is working directory.")
     args=parser.parse_args()
@@ -191,9 +191,8 @@ def main():
     # Right now we always tell busco that it's working with a genome,
     # because it gives less result files if it is a transcriptome.
     # This could be optimized.
-    busco_reference_mode="genome"
     if args.reference:
-        busco_reference_mode=check_reference(args.reference)
+        busco_reference_mode=check_reference(args.reference,args.mode)
     else:
         # Add Trinity assembly to config file.
         args.reference="intermediate_data/"+readname1+".fasta"
