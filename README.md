@@ -66,7 +66,7 @@ python setup.py install
 
 Or if you do not have administartive rights on your machine:
 
-````bash
+```bash
 python setup.py install --user
 ```
 
