@@ -17,7 +17,8 @@ Software for Linux to guess the RNA-Seq library type of paired and single end re
   * [Example commands](#example-commands)
   * [Output](#output)
   * [Parameters](#parameters)
-* [Overview of pipeline](#overview-of-pipeline)
+* [Overview of the pipeline](#overview-of-the-pipeline)
+* [Overview of the different library types](#Overview-of-the-different-library-types)
 * [Library prep methods](#library-prep-methods)
 * [External resources](#external-resources)
 * [Known issues](#known-issues)
@@ -52,11 +53,21 @@ cd ~
 git clone https://github.com/NBISweden/GUESSmyLT.git
 ```
 
-Move to the folder and install:
+Move to the folder:
 
 ```bash
 cd GUESSmyLT/
+```
+
+And launch the installation:
+```bash
 python setup.py install
+```
+
+Or if you do not have administartive rights on your machine:
+
+````bash
+python setup.py install --user
 ```
 
 #### Check installation
@@ -201,7 +212,7 @@ Results from intermediate steps, such as the mapping from Bowtie2 or annotation 
 | --mapped | Sorted .bam file | Full path to mapped read file for skipping Bowtie2 step. NOT DEVELOPED YET. |
 | --output | File path | Full path to result file. If left out files will be written to working directory. |
 
-## Overview of pipeline
+## Overview of the pipeline
 ![alt text](https://github.com/NBISweden/GUESSmyLT/blob/master/Overview_of_GUESSmyLT.png "Pipeline of GUESSmyLT")  
 GUESSmyLT uses Snakemake to build the pipeline it needs in order to predict the library type. Required arguments are organism (euk/pro) and reads (read file(s) in fastq format). Reference (genome or transcriptome in .fasta format) is optional, and if it is not provided, Trinity will first be executed to create a De novo assembly of the reads. Next, BUSCO is used for annotation. This is also a QC step because BUSCO looks for core genes, so called BUSCOs, in the reference. If they cannot be found, it indicates that the reference has bad quality and therefore the pipeline will terminate. If BUSCOs are found, the process continues with mapping the reads to the reference using Bowtie2. The mapping is done with unstranded option so that the reads can be mapped on both the strands and in both directions. Finally, the mapping and annotation is used for inference, which is done with a python script and the library type is returned.
 On top of Snakemake, we have a python script, GUESSmyLT.py. Its purpose is to handle user arguments by:
@@ -214,6 +225,10 @@ The Snakefile subsample handles preparation of the readfiles:
 2.	Modifying files:
 a.	Changes read files that are in wrong format. Trinity and Pysam can only handle old Illumina format: @read_ID/pair#, where pair# is 1 or 2. They do not work with whitespaces, punctutations nor undescrores. Therefore, the script makes sure that the headers are converted into the correct format.
 b.	Deinterleaves paired end read files if they are interleaved.
+
+## Overview of the different library types:
+
+![alt text](https://github.com/NBISweden/GAAS/blob/master/annotation/CheatSheet/pictures/library_types.jpg)
 
 ## Library prep methods:
 
@@ -235,12 +250,9 @@ b.	Deinterleaves paired end read files if they are interleaved.
 | Illumina ScriptSeq| |  yes | Yes | FR | fr-secondstrand
 | SOLiD mate-pair protocol | | | | | ff
 
---rf orientation are produced using the Illumina mate-pair protocol.?
-
+--rf orientation are produced using the Illumina mate-pair protocol?
 
 ## External resources:
-
-![alt text](https://github.com/NBISweden/GAAS/blob/master/annotation/CheatSheet/pictures/library_types.jpg)
 
 [https://chipster.csc.fi/manual/library-type-summary.html](https://chipster.csc.fi/manual/library-type-summary.html)
 [https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)
@@ -259,17 +271,20 @@ export AUGUSTUS_CONFIG_PATH=~/miniconda3/pkgs/augustus-3.2.3-boost1.60_0/config
 4) Mapping, annotation, assembly or the entire pipeline is skipped.  This is most likely due to the fact that Snakemake checks which output files need to be generated and from there only performs the necessary steps of the pipeline. The result of this is that is you already have a .bam file, BUSCO/Trinity output folder or a result .txt file for the reads Snakemake will skip steps  
 5) Installing Trinity for mac via Conda will give you a version from 2011 that doesn't work. Install using Homebrew instead.
 ## TO DO
-1) Handling of --output_name for specifying output name
-2) Handling of --mapped  
-3) Handling of --annotation  
-4) Subsampling only takes top n reads in .fastq files. Can be improved by selecting reads randomly.  
-5) Make BIOCONDA package for easy access. (Maybe snakemakes --use-conda)  
-6) Add test data that check that updates of GUESSmyLT are correct.  
-7) Write Wiki for developers that want to help with this project.  
-8) Optimize BUSCO for transcriptome reference. It is now implemented so that BUSCO always analyses reference with mode 'genome', because otherwise BUSCO genes will not be returned.  
-9) Look more into why some reads get undecided orientation. This is when a read's mate cannot be found and is probably due to a read is at the end of a gene and its mate is outside of the selected region.  
-10) Logging of last step, Inference.  
+	* Make BIOCONDA package for easy access. (Maybe snakemakes --use-conda)  
+	* Add Travis using example data provided as reference.  
+	* Write Wiki for developers that want to help with this project.  
+	* Look more into why some reads get undecided orientation. This is when a read's mate cannot be found and is probably due to a read is at the end of a gene and its mate is outside of the selected region.  
 
 ## Citation
-If you use GUESSmyLT in your work, please cite us:  
-Add DOI: Berner Wik, E., Olin, H., Vigetun Haughey C.
+If you use GUESSmyLT in your work, please cite us.
+DOI will come soon
+
+## Author
+Berner Wik E.<sup>*,1</sup>, Olin H.<sup>*,1</sup>, Vigetun Haughey C.<sup>*,1</sup>, Lisa Klasson<sup>1</sup>, Jacques Dainat<sup>2,3</sup> 
+
+<sup>*</sup>These authors contributed equally to the work.</br>
+<sup>1</sup>Molecular Evolution, Department of Cell and Molecular Biology, Uppsala University, 75124 Sweden.</br>
+<sup>2</sup>National Bioinformatics Infrastructure Sweden (NBIS), SciLifeLab, Uppsala Biomedicinska Centrum (BMC), Husargatan 3, S-751 23 Uppsala, SWEDEN.</br>
+<sup>3</sup>IMBIM - Department of Medical Biochemistry and Microbiology, Box 582, S-751 23 Uppsala, SWEDEN.</br>
+
