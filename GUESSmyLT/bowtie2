@@ -29,7 +29,12 @@ rule bowtie2_index:
     threads:
         config["input"]["threads"]
     run:
-        shell("bowtie2-build --threads {threads} {input} "+index_basename+" | tee {log}")
+        
+        try:
+            shell("bowtie2-build 2>&1 | grep 'threads'")
+            shell("bowtie2-build --threads {threads} {input} "+index_basename+" | tee {log}")
+        except:
+            shell("bowtie2-build {input} "+index_basename+" | tee {log}")
 
 rule bowtie2_map:
     input:

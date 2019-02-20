@@ -17,10 +17,27 @@ rule check_programs:
             pass
         try:
             print("Checking for BUSCO, upon error make sure it's installed properly")
-            shell("run_busco -h >/dev/null")
-            print("BUSCO works, continuing...\n")
+            shell("""
+                set +e
+                echo "Let's try run_busco"
+                run_busco -h >/dev/null
+                exitcode=$?
+                if [ $exitcode -eq 127 ];then
+                    echo "Let's try run_BUSCO.py"
+                    run_BUSCO.py -h >/dev/null
+                    exitcode=$?
+                    if [ $exitcode -eq 127 ];then
+                        exit 1
+                    else
+                        echo "BUSCO works, continuing...\n"
+                    fi
+                else
+                    echo "BUSCO works, continuing...\n"
+                fi
+                """)
         except OSError:
             pass
+            
         try:
             print("Checking for samtools, upon error make sure it's installed properly")
             shell("samtools sort >/dev/null")

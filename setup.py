@@ -38,7 +38,7 @@ setup(
     description='An efficient way to guess the library type of RNA-reads',
 
     url='https://github.com/NBISweden/GUESSmyLT',
-    author='Hampus Olin, Erik Berner-Wik, Caitlin Vigetun Haughey',
+    author='Hampus Olin, Erik Berner-Wik, Caitlin Vigetun Haughey, Lisa Klasson, Jacques Dainat',
 
     license='GPL-3.0',
     packages=find_packages(),
