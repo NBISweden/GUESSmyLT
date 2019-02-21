@@ -281,7 +281,7 @@ If you use GUESSmyLT in your work, please cite us.
 DOI will come soon
 
 ## Author
-Berner Wik E.<sup>*,1</sup>, Olin H.<sup>*,1</sup>, Vigetun Haughey C.<sup>*,1</sup>, Lisa Klasson<sup>1</sup>, Jacques Dainat<sup>2,3</sup> 
+Berner Wik E.<sup>\*,1</sup>, Olin H.<sup>\*,1</sup>, Vigetun Haughey C.<sup>\*,1</sup>, Lisa Klasson<sup>1</sup>, Jacques Dainat<sup>2,3</sup> 
 
 <sup>*</sup>These authors contributed equally to the work.</br>
 <sup>1</sup>Molecular Evolution, Department of Cell and Molecular Biology, Uppsala University, 75124 Sweden.</br>
