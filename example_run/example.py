@@ -26,7 +26,7 @@ def main():
     ORGANISM = "eukaroyte"
 
     # Create the command
-    command = "GUESSmyLT --reads "+fill_path(READ_1)+" "+fill_path(READ_2)+" --organism "+ORGANISM+" --reference "+fill_path(GENOME)+" --output "+OUTPUT
+    command = "GUESSmyLT --reads "+fill_path(READ_1)+" "+fill_path(READ_2)+" --organism "+ORGANISM+" --reference "+fill_path(GENOME)+" --mode genome --output "+OUTPUT
     print("Running the following command: "+command)
 
     # Execute the command

@@ -58,6 +58,6 @@ rule bowtie2_map:
         --threads {threads} \
         2> >(tee {log} >&2) \
         | samtools view -bS - > {folder}"+sample+"_mapped.bam \n \
-        samtools sort {folder}"+sample+"_mapped.bam > {output} \n \
+        samtools sort {folder}"+sample+"_mapped.bam -f {output} \n \
         samtools index {output} \n \
         rm {folder}"+sample+"_mapped.bam")
