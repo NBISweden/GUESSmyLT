@@ -205,7 +205,8 @@ Results from intermediate steps, such as the mapping from Bowtie2 or annotation 
 | Parameter | Input | Description |
 | --- | --- | --- |
 | --subsample | Even integer | Number of reads that will be used for subsampling. |
-| --reference | .fa file | Full paths to reference genome/transcriptome for mapping reads to. |
+| --reference | .fa file | Full paths to reference genome/transcriptome for mapping reads to. When used the --mode option must be filled |
+| --mode | genome or transcriptome | defines if BUSCO has to be run in genome or transcriptome mode  |
 | --threads | Integer | Number of threads to use. |
 | --memory | Number of GB ex: 10G | Maximum memory that can be used in GB. |
 | --annotation | .gff file | Full path to annotation file for skipping BUSCO step. NOT DEVELOPED YET. |
