@@ -162,23 +162,23 @@ Alternating:
 
 #### Paired end reads and reference with specified subsampled reads. Output directed to existing directory.
 ```bash
-GUESSmyLT --reads /home/.../read_1.fastq /home/.../read_2.fastq --organism pro --reference /home/.../ref.fa --subsample 100000 --output /home/.../my_output/
+GUESSmyLT --reads read_1.fastq read_2.fastq --organism pro --reference ref.fa --subsample 100000 --output my_output/
 ```
 
 #### Only paired end reads eukaryotic
 ```bash
-GUESSmyLT --reads /home/.../read_1.fastq /home/.../read_2.fastq --organism euk
+GUESSmyLT --reads read_1.fastq read_2.fastq --organism euk
 ```
 
 #### Single end reads and reference
 ```bash
-GUESSmyLT --reads /home/.../reads.fastq --organism pro --reference /home/.../ref.fa
+GUESSmyLT --reads reads.fastq --organism pro --reference ref.fa
 ```
 
 #### Without installed single end reads and reference
 ```bash
 cd GUESSmyLT/
-python3 GUESSmyLT.py --reads /home/.../reads.fastq --organism pro --reference /home/.../ref.fa
+python3 GUESSmyLT.py --reads reads.fastq --organism pro --reference ref.fa
 ```
 ### Output
 GUESSmyLT will print the result in the command line as well as write it to a file:
