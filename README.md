@@ -15,6 +15,12 @@ Software for Linux to guess the RNA-Seq library type of paired and single end re
   * [Supported header formats](#supported-header-formats)
   * [Supported interleaved formats](#supported-interleaved-formats)
   * [Example commands](#example-commands)
+    * [If you have no other information just the reads](if-you-have-no-other-information-just-the-reads)
+    * [If you only have a reference genome](if-you-only-have-a-reference-genome)
+    * [If you have reference genome and annotation](if-you-have-reference-genome-and-annotation)
+    * [If you only have transcript sequences](if-you-only-have-transcript-sequences)
+    * [If you have transcript sequences and annotation](if-you-have-transcript-sequences-and-annotation)
+    * [Other examples](other-examples)
   * [Output](#output)
   * [Parameters](#parameters)
 * [Overview of the pipeline](#overview-of-the-pipeline)
@@ -159,26 +165,57 @@ Alternating:
 &nbsp; &nbsp; &nbsp; ..  
 
 ### Example commands
+**In top of your fastq RNA-Seq read file(s) (compressed or uncompressed):**  
 
-#### Paired end reads and reference with specified subsampled reads. Output directed to existing directory.
+#### If you have no other information just the reads
+/!\ not yet implemented  
+Example with paired reads in eukaryote.  
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq
+```
+#### If you only have a reference genome  
+Example with paired reads in eukaryote.  
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode genome --organism euk
+```
+
+#### If you have reference genome and annotation
+/!\ not yet implemented  
+Example with paired reads in eukaryote.  
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode genome --annotation annotation.gff --organism euk
+```
+
+#### If you only have transcript sequences
+/!\ not yet implemented  
+Example with paired reads in eukaryote.  
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode transcriptome --organism euk
+```
+
+#### If you have transcript sequences and annotation
+/!\ not yet implemented  
+Example with paired reads in eukaryote.  (The annotation has to be the annotation within the trascriptome not the genome)
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode transcriptome --annotation annotation.gff --organism euk
+```
+
+#### Other examples
+
+##### Paired end reads and reference with specified subsampled reads. Output directed to existing directory.
 ```bash
 GUESSmyLT --reads read_1.fastq read_2.fastq --organism pro --reference ref.fa --subsample 100000 --output my_output/
 ```
 
-#### Only paired end reads eukaryotic
+##### Single end reads and prokaryote genome
 ```bash
-GUESSmyLT --reads read_1.fastq read_2.fastq --organism euk
+GUESSmyLT --reads reads.fastq --reference ref.fa --organism pro
 ```
 
-#### Single end reads and reference
-```bash
-GUESSmyLT --reads reads.fastq --organism pro --reference ref.fa
-```
-
-#### Without installed single end reads and reference
+#### Interleaved paired reads
 ```bash
 cd GUESSmyLT/
-python3 GUESSmyLT.py --reads reads.fastq --organism pro --reference ref.fa
+python3 GUESSmyLT.py --reads reads.fastq --reference ref.fa --organism euk
 ```
 ### Output
 GUESSmyLT will print the result in the command line as well as write it to a file:
