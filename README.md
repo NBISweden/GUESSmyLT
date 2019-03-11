@@ -168,7 +168,6 @@ Alternating:
 **In top of your fastq RNA-Seq read file(s) (compressed or uncompressed):**  
 
 #### If you have no other information just the reads
-/!\ not yet implemented  
 Example with paired reads in eukaryote.  
 ```bash
 GUESSmyLT --reads read_1.fastq read_2.fastq
