@@ -241,8 +241,8 @@ Results from intermediate steps, such as the mapping from Bowtie2 or annotation 
 | Parameter | Input | Description |
 | --- | --- | --- |
 | --subsample | Even integer | Number of reads that will be used for subsampling. |
-| --reference | .fa file | Full paths to reference genome/transcriptome for mapping reads to (nucleotide fasta file). When used the --mode option must be filled. |
-| --mode | genome or transcriptome | Tells the programm if the reference fasta file has to be considered as a genome or a transcriptome. |
+| --reference | .fa file | Full paths to reference genome/transcriptome for mapping reads to (nucleotide fasta file). |
+| --mode | genome or transcriptome | When no annotation is provided, tells the programm if the reference fasta file has to be considered as a genome or a transcriptome in order to use BUSCO properly. |
 | --threads | Integer | Number of threads to use. |
 | --memory | Number of GB ex: 10G | Maximum memory that can be used in GB. |
 | --annotation | .gff file | Full path to annotation file for skipping BUSCO step. NOT DEVELOPED YET. |
