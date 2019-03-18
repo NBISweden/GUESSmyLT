@@ -4,30 +4,35 @@
 import re
 configfile: "config.json"
 
-
 def mapping_bowtie2_command():
-    if len(config["input"]["reads"])==2:
-        return " -1 "+config["input"]["reads"][0]+" -2 "+config["input"]["reads"][1]+" "
-    elif len(config["input"]["reads"])==1:
-        return " -U "+config["input"]["reads"][0]+" "
+    if len(config["reads"])==2:
+        return " -1 "+config["reads"][0]+" -2 "+config["reads"][1]+" "
+    elif len(config["reads"])==1:
+        return " -U "+config["reads"][0]+" "
     else:
         raise(Exception("Reads should be paired or single ended."))
 
 # path to index file without extension (removed .fa or .fasta)
 folder = "intermediate_data/"
-index_basename=folder+"index/"+re.split('/|\.',config["trinity"]["reference"])[-2]
-sample=config["input"]["readname"]+"_on_ref_"+re.split('/|\.',config["trinity"]["reference"])[-2]
+index_basename=folder+"index/"+config["reference_name"]
+sample=config["name"]+"_on_ref_"+config["reference_name"]
+
+def get_reference(wildcards):
+    if config["reference_path"]:
+        return config["reference_path"]
+    else:
+        return rules.trinity.output
 
 rule bowtie2_index:
     input:
-        config["trinity"]["reference"]
+        get_reference
     output:
         expand(index_basename+".{index}.bt2", index=range(1,5)),
         expand(index_basename+".rev.{index}.bt2", index=range(1,3))
     log:
-        "logs/bowtie2_index_"+sample+".log"
+        "logs/bowtie2_index_"+config["reference_name"]+".log"
     threads:
-        config["input"]["threads"]
+        config["threads"]
     run:
         
         try:
@@ -36,22 +41,39 @@ rule bowtie2_index:
         except:
             shell("bowtie2-build {input} "+index_basename+" | tee {log}")
 
+rule bowtie2_already_mapped:
+    input:
+    # Indexed files
+        expand(index_basename+".{index}.bt2", index=range(1,5)),
+        expand(index_basename+".rev.{index}.bt2", index=range(1,3)),
+        # bam files
+        bam_file = rules.subsample_map.output
+    output:
+        folder+"from_mapped_"+config["name"]+str(config["subsample"])+"_sorted.bam"
+    threads:
+        config["threads"]
+    log:
+        "logs/bowtie2_already_mapped_"+sample+".log"
+    run:
+        shell("samtools sort {input.bam_file} -f {output} \n \
+        samtools index {output}")
+    
+
 rule bowtie2_map:
     input:
         # Indexed files
         expand(index_basename+".{index}.bt2", index=range(1,5)),
         expand(index_basename+".rev.{index}.bt2", index=range(1,3)),
         # Read files
-        rules.subsample.output
+        rules.subsample_fastq.output
     output:
-        #folder+"{sample}_sorted.bam"
-        folder+sample+"_sorted.bam"
+        folder+"from_raw_"+config["name"]+str(config["subsample"])+"_sorted.bam"
     threads:
-        config["input"]["threads"]
+        config["threads"]
     log:
-        #"logs/bowtie2_map_{sample}.log"
         "logs/bowtie2_map_"+sample+".log"
     run:
+
         shell("bowtie2 \
         -x {index_basename} \
         "+mapping_bowtie2_command()+"\
@@ -61,3 +83,4 @@ rule bowtie2_map:
         samtools sort {folder}"+sample+"_mapped.bam -f {output} \n \
         samtools index {output} \n \
         rm {folder}"+sample+"_mapped.bam")
+

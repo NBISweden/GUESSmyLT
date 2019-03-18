@@ -18,6 +18,8 @@ Software for Linux to guess the RNA-Seq library type of paired and single end re
     * [If you have no other information just the reads](#if-you-have-no-other-information-just-the-reads)
     * [If you only have a reference genome](#if-you-only-have-a-reference-genome)
     * [If you have reference genome and annotation](#if-you-have-reference-genome-and-annotation)
+    * [If you have reference genome and mapped reads](#if-you-have-reference-genome-and-mapped-reads)
+    * [If you have reference genome and annotation and mapped reads](#if-you-have-reference-genome-and-annotation-and-mapped-reads)
     * [If you only have transcript sequences](#if-you-only-have-transcript-sequences)
     * [If you have transcript sequences and annotation](#if-you-have-transcript-sequences-and-annotation)
     * [Other examples](#other-examples)
@@ -179,21 +181,32 @@ GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode genome --o
 ```
 
 #### If you have reference genome and annotation
-/!\ not yet implemented  
 Example with paired reads in eukaryote.  
 ```bash
 GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode genome --annotation annotation.gff --organism euk
 ```
 
+#### If you have reference genome and mapped reads
+Example with paired reads in eukaryote.
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode genome --mapped mapped.bam --organism euk
+```
+
+#### If you have reference genome and annotation and mapped reads
+Example with paired reads in eukaryote.
+```bash
+GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode genome --mapped mapped.bam --annotation annotation.gff --organism euk
+```
+
 #### If you only have transcript sequences
-/!\ not yet implemented  
+/!\ not yet implemented  (use genome mode instead it should work anyway)
 Example with paired reads in eukaryote.  
 ```bash
 GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode transcriptome --organism euk
 ```
 
 #### If you have transcript sequences and annotation
-/!\ not yet implemented  
+/!\ not yet implemented (use genome mode instead it should work anyway)
 Example with paired reads in eukaryote.  (The annotation has to be the annotation within the trascriptome not the genome)
 ```bash
 GUESSmyLT --reads read_1.fastq read_2.fastq --reference ref.fa --mode transcriptome --annotation annotation.gff --organism euk

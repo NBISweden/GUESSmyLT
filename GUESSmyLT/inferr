@@ -1,22 +1,64 @@
-# Snakefile for ruuning the inferringscript 'inferr.py' which figures out the library-type
+# Snakefile for runing the inferringscript 'inferr.py' which figures out the library-type
 import re, os
+import subprocess
+import shlex
+
 script_dir=os.path.dirname(__file__)
 configfile: "config.json"
 folder = "intermediate_data/"
-reference=re.split(".fa|.fasta",os.path.basename(config["trinity"]["reference"]))[0]
-mapped_reads=config["bowtie2"]["mapped-reads"]
-readname=config["input"]["readname"]
-readpath=config["input"]["reads"][0]
-script_dir=config["script_dir"]
+script_dir     = config["script_dir"]
+output_file = "result_"+config["name"]+"_on_"+config["reference_name"]+".txt"
+name = config["name"]
+reference_name = config["reference_name"]
 
-PE_SE="paired" if len(config["input"]["reads"])==2 else "single"
+## ---- find is PE or SE ----
+#PE_SE="paired" if len(config["reads"])==2 else "single"
+def get_type():
+    type=""
+    bam=""
+    if config["reads"]:
+        bam = rules.bowtie2_map.output
+    else:
+        bam = rules.subsample_map.output
+     
+    cmd = "samtools view -c -f 1 " + str(bam)
+    proc = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, err = proc.communicate()
+    nb_reads_paired = int(str(out.decode("utf-8")).split("\n")[0])
+    if nb_reads_paired  > 0:
+        return "paired"
+    else:
+        return "single"
+
+def fastq_input(wildcards):
+    if config["reads"]:
+        result_subsample = rules.subsample_fastq.output
+        return result_subsample[0]
+    else:
+        return rules.subsample_map.output
+
+def get_map(wildcards):
+    if config["reads"]:
+        return rules.bowtie2_map.output
+    else:
+        return rules.bowtie2_already_mapped.output
+
+def annotation_input(Wildcards):
+    if config["annotation"]:
+        return config["annotation"]
+    else:
+        return rules.busco_ann.output
 
 rule inferr:
     input:
-        config["busco"]["annotation"],
-        config["bowtie2"]["mapped-reads"],
-        rules.subsample.output
+        fastq = fastq_input,
+        annotation = annotation_input,        
+        bam = get_map
+
     output:
-        'result_{readname}_on_{reference}.txt'
-    shell:
-        "python {script_dir}/inferr_lib.py {reference}  {mapped_reads} {readname} {readpath} {PE_SE} "
+        output_file
+
+    run: 
+        type = get_type()
+        shell(
+            "python {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}")

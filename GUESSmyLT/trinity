@@ -1,27 +1,28 @@
 # Execute with "snakemake -s trinity ../intermediate_data/trinity"
+# Currently trinity is not linked to the subsample rule. Trinity run on the full data
 
 configfile: "config.json"
 
 def PE_SE_trinity_command():
-    if len(config["input"]["reads"])==2:
-        return " --left "+config["input"]["reads"][0]+" --right "+config["input"]["reads"][1]+" "
-    elif len(config["input"]["reads"])==1:
-        return " --single "+config["input"]["reads"][0]+" "
+    if len(config["reads"])==2:
+        return " --left "+config["reads"][0]+" --right "+config["reads"][1]+" "
+    elif len(config["reads"])==1:
+        return " --single "+config["reads"][0]+" "
     else:
         raise(Exception("Reads should be paired or single ended."))
 
-readname=config["input"]["readname"]
+name=config["name"]
 
 rule trinity:
     input:
-        rules.subsample.output
+        rules.subsample_fastq.output
     output:
-        trinitydir=directory("intermediate_data/trinity"),
-        renamed="intermediate_data/"+readname+".fasta"
+#        trinitydir=directory("intermediate_data/trinity"),
+        renamed="intermediate_data/"+name+".fasta"
     params:
-        memory=config["input"]["memory"]
+        memory=config["memory"]
     threads:
-        config["input"]["threads"]
+        config["threads"]
     log:
         "logs/trinity_assembly.log"
     run:
@@ -30,7 +31,7 @@ rule trinity:
         --max_memory {params.memory}\
         "+PE_SE_trinity_command()+"\
         --CPU {threads} \
-        --output {output.trinitydir} \
+        --output intermediate_data/trinity \
         | tee {log}")
         shell("mv intermediate_data/trinity/Trinity.fasta {output.renamed}")
-        shell("echo Renamed $(dirname $PWD)/intermediate_data/trinity/Trinity.fasta to $(dirname $PWD)/intermediate_data/"+readname+".fasta | tee --append {log}")
+        shell("echo Renamed $(dirname $PWD)/intermediate_data/trinity/Trinity.fasta to $(dirname $PWD)/intermediate_data/"+name+".fasta | tee --append {log}")

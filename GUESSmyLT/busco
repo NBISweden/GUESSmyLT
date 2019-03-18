@@ -10,28 +10,33 @@ import re, os
 
 configfile: "config.json"
 folder = "intermediate_data/"
-readname=config["input"]["readname"]
+name=config["name"]
+mode = config["mode"]
+lineage = config["lineage"]
+ref_name=config["reference_name"]
 
-mode = config["busco"]["mode"]
-lineage = config["busco"]["lineage"]
-# path to index file without extension (removed .fa or .fasta)
-ref_name=re.split(".fa|.fasta",os.path.basename(config["trinity"]["reference"]))[0]
+def get_reference(wildcards):
+    if config["reference_path"]:
+        return config["reference_path"]
+    else:
+        return rules.trinity.output
+
 rule busco_ann:
     input:
-        config["trinity"]["reference"]
+        get_reference
     output:
-        directory(config["busco"]["annotation"])
+        directory(folder+"run_"+ref_name)
     log:
-        "logs/BUSCO_annotation_run_"+readname+".log"
+        "logs/BUSCO_annotation_run_"+name+".log"
     threads:
-        config["input"]["threads"]
+        config["threads"]
     run:
         #Find the good way to call busco
 
         # Do analysis
         try:
             shell("""
-            run_busco -c {threads} -i {input} -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
+            run_busco -c {threads} -i {input}[0] -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
             mv run_{ref_name} {output}
             """)
         except:

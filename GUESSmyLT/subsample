@@ -1,14 +1,56 @@
 import gzip
+import os
+import shlex
+import shutil
+
 configfile: "config.json"
 output_dir=config["output"]
+output_bam=""
+if config["mapped_name"]:
+    output_bam = "intermediate_data/"+config["mapped_name"]+"."+str(config["subsample"])+".bam"
 
-rule subsample:
+rule subsample_map:
     input:
-        config["input"]["to_subsample"],
+#        config["mapped"],
         'programs.checked'
     priority: 1
     output:
-        "intermediate_data/"+config["input"]["readname"]+".fastq.gz"
+        output_bam
+    run:
+        mapped = config["mapped"]
+        if config["subsample"] == "full":
+#            shutil.copy2(mapped, output_bam)
+            shell("cp "+mapped+" "+output_bam)
+        else:
+            cmd = "samtools view -c -F 260 " + config["mapped"] 
+            proc = subprocess.Popen(shlex.split(cmd), stdout=subprocess.PIPE, stderr=subprocess.PIPE)        
+            out, err = proc.communicate()
+            exitcode = proc.returncode
+            if int(exitcode) != 0:
+                print ("exitcode: "+exitcode+"\nerror message: "+str(err))
+            
+            nb_reads = int(str(out.decode("utf-8")).split("\n")[0])
+            propotion = (int(config["subsample"])*100)/nb_reads
+            print (str(config["subsample"])+" reads correspond to "+str(propotion)+" % of mapped reads")
+            if propotion > 100:
+                shell("cp "+mapped+" "+output_bam)
+            else:
+                shell("samtools view -s "+str(propotion)+" -f bam -b "+mapped+" > "+output_bam )
+
+def get_reads():
+    if config["reads"]:
+        return config["reads"]
+    else:
+        return "no_reads_provided"
+
+rule subsample_fastq:
+    input:
+        #get_reads,
+        expand("{read}", read=config["reads"]),
+        'programs.checked'
+    priority: 1
+    output:
+        expand("intermediate_data/{read}."+str(config["subsample"])+".fastq.gz", read=config["reads_names"])
     run:
         no_subsample = config["subsample"]
         def check_existence(file):
@@ -53,7 +95,7 @@ rule subsample:
             """
             Function for getting the first line of a compressed or uncompressed file.
             """
-            print(read)
+            #print(read)
             if read.endswith(".gz"):
                 with gzip.open(read,"rt") as f:
                     fline=f.readline()
@@ -81,21 +123,31 @@ rule subsample:
             """
             header_flag = True
             readname=re.split(".fq|.fastq",os.path.basename(read))[0]
-            subsampled=output_dir+"intermediate_data/"+readname+".sub."+str(num)+".fastq.gz"
+            subsampled=output_dir+"intermediate_data/"+readname+"."+str(num)+".fastq.gz"
             if os.path.exists(subsampled):
                 print("Already found file with "+str(num)+" subsampled reads.")
                 print("Subsampled file "+subsampled+" will be used for analysis.")
                 header_flag = False
             else:
-                print("Subsampling "+str(num)+" reads of "+read+" to new read file: "+subsampled)
-                # Multiply with 4 because a read consists of 4 lines in a fastq file.
-                num=str(4*num)
-                zip_command="cat"
-                if read.endswith(".gz"):
-                    zip_command="zcat <"
+                if num == "full":
+                    # copy past as it is
+                    if read.endswith((".gz",".gzip")):
+                       shutil.copy2(read, subsampled)
+                    # copy past and compress on the fly
+                    else :
+                        with open(read, 'rb') as f_in:
+                            with gzip.open( subsampled, 'wb') as f_out:
+                                f_out.writelines(f_in)
+                else:
+                    print("Subsampling "+str(num)+" reads of "+read+" to new read file: "+subsampled)
+                    # Multiply with 4 because a read consists of 4 lines in a fastq file.
+                    num=str(4*num)
+                    zip_command="cat"
+                    if read.endswith((".gz","gzip")):
+                        zip_command="zcat <"
 
                     # gzip gives broken pipe for compressed files, but works anyway.
-                os.system(zip_command+" "+read+" | head -"+num+" | gzip > "+subsampled)
+                    os.system(zip_command+" "+read+" | head -"+num+" | gzip > "+subsampled)
             return header_flag, subsampled
 
 
@@ -245,13 +297,13 @@ rule subsample:
 
             check_readfile_extension(read1)
             check_readfile_extension(read2)
-
+            print(read1)
             # Subsample reads from read file and continue analysis on new, subsampled files.
             # Need to divide with 2 since subsample takes the total amount of reads that will be used.
             no_subsample=config["subsample"]
             header_flag1, read1=subsample(read1,no_subsample)
             header_flag2, read2=subsample(read2,no_subsample)
-
+            #print(read1)
             fline1=get_first_line(read1)
             fline2=get_first_line(read2)
 
@@ -298,11 +350,11 @@ rule subsample:
             return read1,read2
 
         # Check if one read file is provided.
-        if len(config["input"]["to_subsample"])==1:
+        if len(config["reads"])==1:
             # Check that single reads are OK
             # or deinterleave paired end reads.
-            check_single_reads(config["input"]["to_subsample"][0])
+            check_single_reads(config["reads"][0])
         # Check if two read files are provided.
-        elif len(config["input"]["to_subsample"])==2:
+        elif len(config["reads"])==2:
             # Check that paired end reads are OK.
-            check_paired_reads(config["input"]["to_subsample"][0],config["input"]["to_subsample"][1])
+            check_paired_reads(config["reads"][0],config["reads"][1])
