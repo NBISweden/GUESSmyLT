@@ -278,7 +278,7 @@ b.	Deinterleaves paired end read files if they are interleaved.
 
 ## Overview of the different library types:
 
-![alt text](https://github.com/NBISweden/GAAS/blob/master/annotation/CheatSheet/pictures/library_types.jpg)
+![alt text](https://github.com/NBISweden/GUESSmyLT/blob/master/library_types.jpg)
 
 ## Library prep methods:
 
