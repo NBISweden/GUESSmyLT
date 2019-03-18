@@ -233,6 +233,9 @@ def main():
     parser.add_argument("--memory",type=str, default="8G",help="Maximum memory that can be used by GUESSmyLT in GB. E.g. '10G'. Default value is 8G.")
     parser.add_argument("--output",type=str,default=working_dir,help="Full path to output directory. Default is working directory.")
     parser.add_argument("-n", action="store_true", help="(Snakemake dryrun option) Allows to see the scheduling plan including the assigned priorities.")
+    if len(sys.argv)==1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
     args=parser.parse_args()
 
     # ---fill the full path---
@@ -247,7 +250,10 @@ def main():
     if args.annotation:
         args.annotation = get_full_path(args.annotation)      
 
+    # ---Deal with output dir---
     global output_dir
+    if not args.output.endswith("/"):
+       args.output=args.output+"/" 
     output_dir =  get_full_path(args.output)
     if not os.path.exists(output_dir):
         os.system( "mkdir " + output_dir)
