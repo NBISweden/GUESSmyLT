@@ -6,19 +6,17 @@ tags:
   - library-type
 authors:
   - name: Berner Wik E.
-    affiliation: "*, 1"
+    affiliation: 1
   - name: Olin H.
-    affiliation: "*, 1"
+    affiliation: 1
   - name: Vigetun Haughey C.
-    affiliation: "*, 1"
+    affiliation: 1
   - name: Klasson L.
     affiliation: 1
   - name: Dainat J.
     orcid: 0000-0002-6629-0173
     affiliation: "2, 3"
 affiliations:
- - name: These authors contributed equally to the work
-   index: *
  - name: Molecular Evolution, Department of Cell and Molecular Biology, Uppsala University, 75124 Sweden.
    index: 1
  - name: IMBIM - Department of Medical Biochemistry and Microbiology, Box 582, S-751 23 Uppsala, SWEDEN.
@@ -37,5 +35,9 @@ The information regarding the library type is helpful for improving the reads ma
 But none of them can guess the full information of the library type, they can require specific inputs (e.g. an annotation file), they can deal with only specific library types, or can be done only with substantial manual work.
 GUESSmyLT aims to automate the different steps needed for identifying the RNA-Seq library type as comprehensively as possible, and can deal with any type of input data: from mapped reads, from raw reads, with or without annotation, with or without reference genome.
 GUESSmyLT was developed as a snakemake pipeline consisting of three pre existing softwares (bowtie2 [@Bowtie], trinity [@Trinity] and busco [@Busco]) and an inference step at the end that performs the library type prediction.
+
+# Authors Contributions
+
+Berner Wik E., Olin H. and Vigetun Haughey C. contributed equally to this work. 
 
 # References
