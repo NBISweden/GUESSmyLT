@@ -44,6 +44,6 @@ Berner Wik E., Olin H. and Vigetun Haughey C. contributed equally to this work.
 
 # Acknowledgements
 
-We acknowledge the NBIS development team for their inputs.
+We acknowledge Istvan Albert, Bengt Sennblad and the NBIS development team for their inputs.
 
 # References
