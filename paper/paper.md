@@ -35,12 +35,15 @@ But none of them can guess the full information of the library type, they can re
 GUESSmyLT aims to automate the different steps needed for identifying the RNA-Seq library type as comprehensively as possible, and can deal with any type of input data: from mapped reads, from raw reads, with or without annotation, with or without reference genome.
 GUESSmyLT was developed as a snakemake pipeline consisting of three pre existing softwares (bowtie2 [@Bowtie], trinity [@Trinity] and busco [@Busco]) and an inference step at the end that performs the library type prediction.
 
-# Figures
 
 ![Overview of the different library types.](library_types.jpg)
 
 # Authors Contributions
 
 Berner Wik E., Olin H. and Vigetun Haughey C. contributed equally to this work. 
+
+# Acknowledgements
+
+We acknowledge the NBIS development team for their inputs.
 
 # References
