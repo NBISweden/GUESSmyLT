@@ -13,9 +13,6 @@ We thank you in advance :thumbsup: :tada: for taking the time to contribute, whe
   - as much relevant information as possible, and
   - a *code sample* or an (executable) *test case* demonstrating the expected behaviour that is not occurring.
 
-* If possible, use the following [template to report a bug].
-
-
 ## How to work on a new feature/bug
 
 Create an issue on Github or you can alternatively pick one already created.
@@ -88,3 +85,5 @@ Once the review is positive the Pull Request can be _merged_ into `master` and t
 
 Thanks again.
 
+[searching under Issues]: https://github.com/NBISweden/GUESSmyLT/issues?utf8=%E2%9C%93&q=is%3Aissue%20label%3Abug%20%5BBUG%5D%20in%3Atitle
+[open a new one]: https://github.com/NBISweden/GUESSmyLT/issues/new?title=%5BBUG%5D
