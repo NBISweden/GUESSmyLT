@@ -327,7 +327,6 @@ export AUGUSTUS_CONFIG_PATH=~/miniconda3/pkgs/augustus-3.2.3-boost1.60_0/config
 ## TO DO
 	* Make BIOCONDA package for easy access. (Maybe snakemakes --use-conda)  
 	* Add Travis using example data provided as reference.  
-	* Write Wiki for developers that want to help with this project.  
 	* Look more into why some reads get undecided orientation. This is when a read's mate cannot be found and is probably due to a read is at the end of a gene and its mate is outside of the selected region.  
 
 ## Citation
