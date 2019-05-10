@@ -43,7 +43,7 @@ setup(
     license='GPL-3.0',
     packages=find_packages(),
 
-    install_requires=['biopython==1.67', 'bcbio-gff==0.6.4', 'pysam==0.15.1', 'snakemake==5.4.0'],
+    install_requires=['biopython==1.67', 'bcbio-gff==0.6.4', 'pysam>=0.13.0', 'snakemake==5.4.0'],
     include_package_data=True,
 
     entry_points={
