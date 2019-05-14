@@ -50,5 +50,7 @@ setup(
         'console_scripts': ['GUESSmyLT = GUESSmyLT.GUESSmyLT:main',
         'GUESSmyLT-example = example_run.example:main',
         ],
-    }
+    },
+
+    scripts=['GUESSmyLT/inferr_lib.py']
 )

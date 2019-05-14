@@ -61,4 +61,4 @@ rule inferr:
     run: 
         type = get_type()
         shell(
-            "{script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}")
+            "inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}")
