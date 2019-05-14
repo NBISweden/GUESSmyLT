@@ -1,0 +1,41 @@
+# Need samtools and bowtie2 in path to work.
+# Execute with command: snakemake -s samtools ../intermediate_data/[run_name]_sorted.bam
+
+import re
+configfile: "config.json"
+
+# path to index file without extension (removed .fa or .fasta)
+folder = "intermediate_data/"
+index_basename=folder+"index/"+config["reference_name"]
+sample=config["name"]+"_on_ref_"+config["reference_name"]
+
+rule samtools_sort_already_mapped:
+    input:
+         # Read files
+        bam_file = rules.subsample_map.output
+    output:
+        folder+"from_mapped_"+config["name"]+str(config["subsample"])+"_sorted.bam"
+    threads:
+        config["threads"]
+    log:
+        "logs/samtools_sort_already_mapped_"+sample+".log"
+    run:
+        shell("samtools sort {input.bam_file} -f {output} \n \
+        samtools index {output}")
+    
+
+rule samtools_sort_new_mapped:
+    input:
+        # Read files
+        bam = rules.bowtie2_map.output
+    output:
+        folder+"from_raw_"+config["name"]+str(config["subsample"])+"_sorted.bam"
+    threads:
+        config["threads"]
+    log:
+        "logs/samtools_sort_new_mapped_"+sample+".log"
+    run:
+
+        shell("samtools sort {input.bam} -f {output} \n \
+        samtools index {output} \n \
+        rm {input.bam}")
