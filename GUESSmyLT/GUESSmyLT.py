@@ -372,7 +372,7 @@ def main():
                 "subsample" : subsample_value,
                 "threads" : args.threads,
                 "memory" : args.memory,
-                "output" : args.output,
+                "output" : output_dir,
                 "script_dir" : script_dir
                }
         configfile.seek(0)
