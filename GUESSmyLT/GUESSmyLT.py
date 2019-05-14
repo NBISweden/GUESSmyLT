@@ -163,7 +163,7 @@ def check_mode(mode):
     """
     #check that the mode asked exists
     if not mode:
-        print("Mode parameter (--mode) must be filled when no annotation provided (--annotation). It must be <genome> or <transcriptome>.")
+        print("Mode parameter (--mode) must be filled when no annotation provided (--annotation). Accepted value: genome or transcriptome.")
         sys.exit()
     elif mode.lower() in "genome" and mode.lower() not in "transcriptome":
         return "genome"
@@ -224,10 +224,10 @@ def main():
     parser=argparse.ArgumentParser(description="GUESSmyLT, GUESS my Library Type. Can predict the library type used for RNA-Seq. The prediction is based on the orientaion of your read file(s) in .fastq/.fastq.gz/.bam format. Knowing the library type helps you with downstream analyses since it greatly improves the assembly.")
     parser.add_argument("--organism",type=str, help="Mandatory when no annotation provided. What organism are you dealing with? prokaryote or eukaryote.")
     parser.add_argument("--reads",nargs="+",type=str,help="One or two read files in .fastq or .fastq.gz format. Files can be compressed or uncrompressed. Handles interleaved read files and any known .fastq header format. ")
-    parser.add_argument("--subsample",type=int,help="Number of subsampled reads that will be used for analysis. Must be an even number.")
-    parser.add_argument("--reference",type=str,help="Mandatory when --mapped used or when no reads provided (--reads). Reference file in .fa/.fasta format. Reference can be either transcriptome or genome.")
-    parser.add_argument("--mode",type=str,help="Mandatory when no annotation provided (--annotation). Mode can be genome or transcriptome. It defines how the reference fasta file will be handled by BUSCO. Only genome mode is implemented currently.")
-    parser.add_argument("--annotation",type=str,help="Annotation file in .gff format. Needs to contain genes.")
+    parser.add_argument("--subsample", type=int,help="Number of subsampled reads that will be used for analysis. Must be an even number.")
+    parser.add_argument("--reference", type=str,help="Mandatory when --mapped used or when no reads provided (--reads). Reference file in .fa/.fasta format. Reference can be either transcriptome or genome.")
+    parser.add_argument("--mode", default="genome", type=str,help="Mode can be genome or transcriptome (default genome). It defines how the reference fasta file will be handled by BUSCO. This option is used when no annotation is provided (--annotation).")
+    parser.add_argument("--annotation", type=str,help="Annotation file in .gff format. Needs to contain genes.")
     parser.add_argument("--mapped",type=str,help="Mapped file in .bam format (Will be sorted). Reference that reads have been mapped to has to be provided.")
     parser.add_argument("--threads", type=int, default=2,help="The number of threads that can be used by GUESSmyLT. Needs to be an integer. Defualt value is 2.")
     parser.add_argument("--memory",type=str, default="8G",help="Maximum memory that can be used by GUESSmyLT in GB. E.g. '10G'. Default value is 8G.")
