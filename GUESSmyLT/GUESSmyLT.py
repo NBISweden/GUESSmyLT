@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 # Top script for pipeline of GUESSmyLT.
 # The script handles user arguments, validates inputs and executes the pipeline by calling Snakemake.
 #
