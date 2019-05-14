@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 
 from setuptools import setup, find_packages
 import sys, os, json, subprocess
@@ -51,6 +51,4 @@ setup(
         'GUESSmyLT-example = example_run.example:main',
         ],
     },
-
-    scripts=['GUESSmyLT/inferr_lib.py']
 )

@@ -60,5 +60,10 @@ rule inferr:
 
     run: 
         type = get_type()
-        shell(
-            "inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}")
+        shell("if(( `python --version 2>&1 | awk '{{print $2}}' | cut -d'.' -f1` >= 3 ));then \n \
+                        echo \"call inferr_lib.py with python prefix\"; \n \
+                        python {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}; \n \
+                else \n \
+                        echo \"call inferr_lib.py with python3 prefix\"; \n \
+                        python3 {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}; \n \
+                fi")
