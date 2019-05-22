@@ -136,8 +136,12 @@ rule subsample_fastq:
                     # copy past and compress on the fly
                     else :
                         with open(read, 'rb') as f_in:
-                            with gzip.open( subsampled, 'wb') as f_out:
-                                f_out.writelines(f_in)
+                            try:
+                                with gzip.open( subsampled, 'wb') as f_out:
+                                    f_out.writelines(f_in)
+                            except IOError:
+                                print("Could not write file '"+subsampled+"'. Make sure it exists.")
+                                sys.exit()
                 else:
                     print("Subsampling "+str(num)+" reads of "+read+" to new read file: "+subsampled)
                     # Multiply with 4 because a read consists of 4 lines in a fastq file.
@@ -297,13 +301,11 @@ rule subsample_fastq:
 
             check_readfile_extension(read1)
             check_readfile_extension(read2)
-            print(read1)
             # Subsample reads from read file and continue analysis on new, subsampled files.
             # Need to divide with 2 since subsample takes the total amount of reads that will be used.
             no_subsample=config["subsample"]
             header_flag1, read1=subsample(read1,no_subsample)
             header_flag2, read2=subsample(read2,no_subsample)
-            #print(read1)
             fline1=get_first_line(read1)
             fline2=get_first_line(read2)
 

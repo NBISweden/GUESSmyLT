@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.6
+#!/usr/bin/env python3
 
 from setuptools import setup, find_packages
 import sys, os, json, subprocess
@@ -43,12 +43,12 @@ setup(
     license='GPL-3.0',
     packages=find_packages(),
 
-    install_requires=['biopython==1.67', 'bcbio-gff==0.6.4', 'pysam==0.15.1', 'snakemake==5.4.0'],
+    install_requires=['biopython==1.67', 'bcbio-gff==0.6.4', 'pysam>=0.13.0', 'snakemake==5.4.0'],
     include_package_data=True,
 
     entry_points={
         'console_scripts': ['GUESSmyLT = GUESSmyLT.GUESSmyLT:main',
         'GUESSmyLT-example = example_run.example:main',
         ],
-    }
+    },
 )

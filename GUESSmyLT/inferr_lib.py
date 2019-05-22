@@ -1,3 +1,4 @@
+#!/usr/bin/env python3 
 """
 Script for inferring library type of mapped reads.
 Uses augustus-predicted genes via BUSCO and bowtie2-mapped reads.

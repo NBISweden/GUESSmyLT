@@ -17,7 +17,7 @@ def get_type():
     type=""
     bam=""
     if config["reads"]:
-        bam = rules.bowtie2_map.output
+        bam = rules.samtools_sort_new_mapped.output
     else:
         bam = rules.subsample_map.output
      
@@ -39,9 +39,9 @@ def fastq_input(wildcards):
 
 def get_map(wildcards):
     if config["reads"]:
-        return rules.bowtie2_map.output
+        return rules.samtools_sort_new_mapped.output
     else:
-        return rules.bowtie2_already_mapped.output
+        return rules.samtools_sort_already_mapped.output
 
 def annotation_input(Wildcards):
     if config["annotation"]:
@@ -60,5 +60,10 @@ rule inferr:
 
     run: 
         type = get_type()
-        shell(
-            "python {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}")
+        shell("if(( `python --version 2>&1 | awk '{{print $2}}' | cut -d'.' -f1` >= 3 ));then \n \
+                        echo \"call inferr_lib.py with python prefix\"; \n \
+                        python {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}; \n \
+                else \n \
+                        echo \"call inferr_lib.py with python3 prefix\"; \n \
+                        python3 {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}; \n \
+                fi")

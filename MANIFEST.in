@@ -7,6 +7,7 @@ include GUESSmyLT/trinity
 include GUESSmyLT/inferr_lib.py
 include GUESSmyLT/check_programs
 include GUESSmyLT/subsample
+include GUESSmyLT/samtools
 include example_run/example.py
 include example_run/4_r1.fastq.gz
 include example_run/4_r2.fastq.gz

@@ -36,7 +36,7 @@ Software for Linux to guess the RNA-Seq library type of paired and single end re
 ## Background
 The choice of RNA-Seq library type defines the read orientation of the sequencing and the order in which the strands of cDNA are sequenced, which means that RNA-Seq reads from different library types can differ significantly. The information regarding library type can be very useful for reads to be assembled into a transcriptome or mapped to a reference assembly. This is because the library type can help to discern where in the transcriptome shorter ambiguous reads belong by using the read’s relative orientation and from which strand it was sequenced. Unfortunately, this information regarding the library type used is not included in sequencing output files and is usually lost before the assembly of the data. Even when working with RNA-Seq data from public repositories there is no guarantee that the library type information is correct or that it exists at all. This is what GUESSmyLT aims to fix by looking at how reads map to a reference and together with gene annotation guess which library was used to generate the data.
 
-## Prerequisites
+## Dependencies:  
 Developed for Linux systems.
 Python 3:
   - biopython (1.67)
@@ -49,8 +49,12 @@ Other programs:
   - Bowtie2 (2.3.4.3) - Mapping
   - Snakemake (5.4.0) - Workflow management
 
-## Installation
-Installation using setup.py is not necessary, it adds the ability to run the tool using the command 'GUESSmyLT' globally. Tool can be used by running the python script 'GUESSmyLT.py' from within the tool folder. Note that the prokaryote and eukaryote BUSCO datasets have to be downloaded and extracted manually from https://busco.ezlab.org . Their paths must also be added to the config.json file under 'eukaryote_db' and 'prokaryote_db' in this case.
+Others:  
+  - Prokaryote and eukaryote BUSCO datasets (from https://busco.ezlab.org)
+
+## Installation  
+
+Installation using setup.py will install the python 3 dependencies and download the BUSCO dataset. The external programs can be installed using conda.
 
 #### Installation with git:
 
@@ -323,7 +327,6 @@ export AUGUSTUS_CONFIG_PATH=~/miniconda3/pkgs/augustus-3.2.3-boost1.60_0/config
 ## TO DO
 	* Make BIOCONDA package for easy access. (Maybe snakemakes --use-conda)  
 	* Add Travis using example data provided as reference.  
-	* Write Wiki for developers that want to help with this project.  
 	* Look more into why some reads get undecided orientation. This is when a read's mate cannot be found and is probably due to a read is at the end of a gene and its mate is outside of the selected region.  
 
 ## Citation
