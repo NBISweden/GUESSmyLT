@@ -36,7 +36,7 @@ rule busco_ann:
         # Do analysis
         try:
             shell("""
-            run_busco -c {threads} -i {input}[0] -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
+            run_busco -c {threads} -i {input} -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
             mv run_{ref_name} {output}
             """)
         except:
