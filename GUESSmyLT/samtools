@@ -2,6 +2,9 @@
 # Execute with command: snakemake -s samtools ../intermediate_data/[run_name]_sorted.bam
 
 import re
+import subprocess
+import shlex
+
 configfile: "config.json"
 
 # path to index file without extension (removed .fa or .fasta)
@@ -9,9 +12,27 @@ folder = "intermediate_data/"
 index_basename=folder+"index/"+config["reference_name"]
 sample=config["name"]+"_on_ref_"+config["reference_name"]
 
+def get_samtools_sort_command():
+    p1 = subprocess.Popen(shlex.split(r'samtools --version'), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p2 = subprocess.Popen(shlex.split(r'head -n 1'), stdin=p1.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    p3 = subprocess.Popen(shlex.split(r'cut -d" " -f2'), stdin=p2.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    out, error = p3.communicate()
+    print ("out:"+ out.decode("utf-8"))
+    if error:
+        print('Error: '  + e.decode('ascii'))
+    #print('code: ' + str(proc.returncode))
+
+    version = float(out.decode("utf-8").split("\n")[0])
+    print ("samtools version being used:"+ str(version) )
+
+    if version >= 1.3:
+        return ">"
+    else:
+        return "-f" 
+
 rule samtools_sort_already_mapped:
     input:
-         # Read files
+        # Read files
         bam_file = rules.subsample_map.output
     output:
         folder+"from_mapped_"+config["name"]+str(config["subsample"])+"_sorted.bam"
@@ -35,7 +56,7 @@ rule samtools_sort_new_mapped:
     log:
         "logs/samtools_sort_new_mapped_"+sample+".log"
     run:
-
-        shell("samtools sort {input.bam} -f {output} \n \
+        command = get_samtools_sort_command()
+        shell("samtools sort {input.bam} "+command+" {output} \n \
         samtools index {output} \n \
         rm {input.bam}")
