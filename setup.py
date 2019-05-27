@@ -33,7 +33,7 @@ with open(config_path,"r+") as configfile:
 
 setup(
     name='guessmylt',
-    version='0.1',
+    version='0.2',
 
     description='An efficient way to guess the library type of RNA-reads',
 
