@@ -1,12 +1,13 @@
 # GUESSmyLT
-Software for Linux to guess the RNA-Seq library type of paired and single end read files using mapping and gene annotation.  
+Software to guess the RNA-Seq library type of paired and single end read files using mapping and gene annotation.  
 
 ## Table of contents
 
-* [GUESSmyLT](#GUESSmyLT)
 * [Background](#background)
-* [Prerequisites](#Prerequisites)
+* [Dependencies](#Dependencies)
 * [Installation](#Installation)
+  * [Installation with conda](#installation-with-conda)
+  * [Installation with pip](#installation-with-pip)
   * [Installation with git](#installation-with-git)
   * [Check installation](#check-installation)
 * [Result](#result)
@@ -37,46 +38,54 @@ Software for Linux to guess the RNA-Seq library type of paired and single end re
 The choice of RNA-Seq library type defines the read orientation of the sequencing and the order in which the strands of cDNA are sequenced, which means that RNA-Seq reads from different library types can differ significantly. The information regarding library type can be very useful for reads to be assembled into a transcriptome or mapped to a reference assembly. This is because the library type can help to discern where in the transcriptome shorter ambiguous reads belong by using the read’s relative orientation and from which strand it was sequenced. Unfortunately, this information regarding the library type used is not included in sequencing output files and is usually lost before the assembly of the data. Even when working with RNA-Seq data from public repositories there is no guarantee that the library type information is correct or that it exists at all. This is what GUESSmyLT aims to fix by looking at how reads map to a reference and together with gene annotation guess which library was used to generate the data.
 
 ## Dependencies:  
-Developed for Linux systems.
-Python 3:
-  - biopython (1.67)
-  - bcbio-gff (0.6.4)
-  - pysam (0.15.1)
+Developed for Unix systems. Depending installation approach more or less dependencies will be installed automatically. Check the installation paragraph.
+
+Python and libraries:
+ * Python >3
+ * biopython (1.67)
+ * bcbio-gff (0.6.4)
+ * pysam (0.15.1)
 
 Other programs:
-  - Trinity (2.8.4) - Reference assembly
-  - BUSCO (3.0.2) - Gene annotation
-  - Bowtie2 (2.3.4.3) - Mapping
-  - Snakemake (5.4.0) - Workflow management
+ * Snakemake (5.4.0) - Workflow management
+ * BUSCO (3.0.2) - Gene annotation
+ * Bowtie2 (2.3.4.3) - Mapping
+ * Trinity (2.8.4) - Reference assembly
 
 Others:  
   - Prokaryote and eukaryote BUSCO datasets (from https://busco.ezlab.org)
 
 ## Installation  
 
-Installation using setup.py will install the python 3 dependencies and download the BUSCO dataset. The external programs can be installed using conda.
+#### Installation with conda: 
 
-#### Installation with git:
 
-Clone the repository to your home directory:
+
+#### Installation with pip:  
+
+Installation using **pip** will install the python 3 dependencies and download the BUSCO dataset. The external programs can be installed using conda.
 
 ```bash
-cd ~
-git clone https://github.com/NBISweden/GUESSmyLT.git
+pip install GUESSmyLT
 ```
 
-Move to the folder:
+#### Installation with git:  
+
+Installation using **git** will install the python 3 dependencies and download the BUSCO dataset. The external programs can be installed using conda.
+
+Clone the repository and move to the folder:
 
 ```bash
+git clone https://github.com/NBISweden/GUESSmyLT.git
 cd GUESSmyLT/
 ```
 
-And launch the installation:
+Launch the installation either:
 ```bash
 python setup.py install
 ```
 
-Or if you do not have administartive rights on your machine:
+Or if you do not have administrative rights on your machine:
 
 ```bash
 python setup.py install --user
