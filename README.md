@@ -43,8 +43,8 @@ Developed for Unix systems. Depending installation approach more or less depende
 Python and libraries:
  * Python >3
  * biopython (1.67)
- * bcbio-gff (0.6.4)
- * pysam (0.15.1)
+ * bcbio-gff (0.6.4) - handling gff annotation
+ * pysam (0.15.1) - handling mapped reads
 
 Other programs:
  * Snakemake (5.4.0) - Workflow management
@@ -53,17 +53,17 @@ Other programs:
  * Trinity (2.8.4) - Reference assembly
 
 Others:  
-  - Prokaryote and eukaryote BUSCO datasets (from https://busco.ezlab.org)
+  - Prokaryote and eukaryote BUSCO datasets (from https://busco.ezlab.org) included in the package.
 
 ## Installation  
 
 #### Installation with conda: 
 
-
+conda install GUESSmyLT -c juke34
 
 #### Installation with pip:  
 
-Installation using **pip** will install the python 3 dependencies and download the BUSCO dataset. The external programs can be installed using conda.
+Installation using **pip** will not install BUSCO, Bowtie2 and Trinity. These external programs can be installed using conda.
 
 ```bash
 pip install GUESSmyLT
@@ -71,7 +71,7 @@ pip install GUESSmyLT
 
 #### Installation with git:  
 
-Installation using **git** will install the python 3 dependencies and download the BUSCO dataset. The external programs can be installed using conda.
+Installation using **git** will not install BUSCO, Bowtie2 and Trinity. These external programs can be installed using conda.
 
 Clone the repository and move to the folder:
 
