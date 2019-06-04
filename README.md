@@ -60,7 +60,7 @@ Others:
 #### Installation with conda: 
 
 ```bash
-conda install GUESSmyLT -c juke34
+conda install -c juke34 guessmylt
 ```
 
 #### Installation with pip:  
