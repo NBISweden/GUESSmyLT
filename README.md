@@ -59,7 +59,9 @@ Others:
 
 #### Installation with conda: 
 
+```bash
 conda install GUESSmyLT -c juke34
+```
 
 #### Installation with pip:  
 
