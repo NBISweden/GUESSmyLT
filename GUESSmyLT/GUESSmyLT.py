@@ -11,6 +11,7 @@
 import argparse, sys, json, os, re, subprocess, shlex
 from BCBio import GFF
 import pysam
+import tarfile
 from Bio import SeqIO
 from shutil import copyfile
 
@@ -18,6 +19,19 @@ from shutil import copyfile
 script_dir = os.path.dirname(os.path.abspath(__file__)) + "/"
 # Working dir, where files will be written if no --ouput arg given
 working_dir = os.getcwd() + "/"
+
+# --- check BUSCO dataset ---
+
+# Set busco eukaryote 
+busco_euk = script_dir+"data/eukaryota_odb9"
+if not os.path.isfile(busco_euk):
+    tf = tarfile.open(script_dir+"data/eukaryota_odb9.tar.gz")
+    tf.extractall(path=script_dir+"data/")
+# Set busco prokaryote
+busco_prok = script_dir+"data/bacteria_odb9"
+if not os.path.isfile(busco_prok):
+    tf = tarfile.open(script_dir+"data/bacteria_odb9.tar.gz")
+    tf.extractall(path=script_dir+"data/")
 
 
 # --- Miscellaneous functions ---
@@ -341,13 +355,11 @@ def main():
         else:
             refname = sample_name
 
-        # get busco_db
-        with open(script_dir+"config.json","r") as configfile:
-            data=json.load(configfile)
-            if args.organism == "prokaryote":
-                lineage = data["eukaryote_db"]
-            else:
-                lineage = data["eukaryote_db"]
+        # set busco dataset
+        if args.organism == "prokaryote":
+            lineage = busco_prok
+        else:
+            lineage = busco_euk
 
     # check annotation file
     if args.annotation:

@@ -1,6 +1,5 @@
 include GUESSmyLT/bowtie2
 include GUESSmyLT/busco
-include GUESSmyLT/config.json
 include GUESSmyLT/inferr
 include GUESSmyLT/Snakefile
 include GUESSmyLT/trinity
@@ -12,3 +11,5 @@ include example_run/example.py
 include example_run/4_r1.fastq.gz
 include example_run/4_r2.fastq.gz
 include example_run/4.fa
+include GUESSmyLT/data/eukaryota_odb9.tar.gz
+include GUESSmyLT/data/bacteria_odb9.tar.gz
