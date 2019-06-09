@@ -57,10 +57,10 @@ Others:
 
 ## Installation  
 
-#### Installation with conda: 
+#### Installation with conda (in preparation): 
 
 ```bash
-conda install -c juke34 guessmylt
+
 ```
 
 #### Installation with pip:  
