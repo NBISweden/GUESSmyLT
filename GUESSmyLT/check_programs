@@ -15,7 +15,6 @@ rule check_programs:
             print("bowtie2 is missing.")
             exit(1)
         print("Bowtie2 works, continuing...\n")
-
         
         print("Checking for BUSCO, upon error make sure it's installed properly")
         print("Let's try run_busco")
@@ -26,14 +25,11 @@ rule check_programs:
                 exit(1)
         print ("BUSCO works, continuing...\n")
 
-
         print("Checking for samtools, upon error make sure it's installed properly")
         if not shutil.which("samtools"):
             print("Samtools is missing.")
             exit(1)
         print("Samtools works, continuing...\n")
-
-
 
         print("Checking for Trinity")
         if not shutil.which("Trinity"):

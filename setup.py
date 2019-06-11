@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='guessmylt',
-    version='0.2.2',
+    version='0.2.3',
 
     description='An efficient way to guess the library type of RNA-reads',
 
