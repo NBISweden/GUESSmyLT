@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='guessmylt',
-    version='0.2.1',
+    version='0.2.2',
 
     description='An efficient way to guess the library type of RNA-reads',
 
@@ -14,12 +14,12 @@ setup(
     license='GPL-3.0',
     packages=find_packages(),
 
-    install_requires=['biopython==1.67', 'bcbio-gff==0.6.4', 'pysam>=0.13.0', 'snakemake==5.4.0'],
+    install_requires=['biopython==1.67', 'bcbio-gff==0.6.4', 'pysam>=0.13.0', 'snakemake==5.4.*'],
     include_package_data=True,
 
     entry_points={
         'console_scripts': ['GUESSmyLT = GUESSmyLT.GUESSmyLT:main',
-        'GUESSmyLT-example = example_run.example:main',
+        'GUESSmyLT-example = GUESSmyLT.test.example:main',
         ],
     },
 )
