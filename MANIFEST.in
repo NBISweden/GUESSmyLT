@@ -1,3 +1,5 @@
 include GUESSmyLT/*
+include GUESSmyLT/test/*
+include GUESSmyLT/data/*
 include LICENSE
 include README.md
