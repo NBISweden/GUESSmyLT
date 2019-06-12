@@ -7,6 +7,8 @@
 # export AUGUSTUS_CONFIG_PATH=/path/to/augustus/config
 # e.g. export AUGUSTUS_CONFIG_PATH=~/miniconda3/pkgs/augustus-3.2.3-boost1.60_0/config
 import re, os
+from os import environ
+import shutil
 
 configfile: "config.json"
 folder = "intermediate_data/"
@@ -32,18 +34,25 @@ rule busco_ann:
         config["threads"]
     run:
         #Find the good way to call busco
+        busco_script = shutil.which("run_busco") or shutil.which("run_BUSCO.py")
+
+        #check presence of AUGUSTUS_CONFIG_PATH (singularity problem)        
+        if environ.get('AUGUSTUS_CONFIG_PATH'):
+            print ('AUGUSTUS_CONFIG_PATH set:'+environ.get('AUGUSTUS_CONFIG_PATH'))
+        else:
+           print ('AUGUSTUS_CONFIG_PATH absent')
+           augustus_path = shutil.which("augustus")
+           print ("augustus_path:"+augustus_path)
+           augustus_config_path = augustus_path[:-12]
+           augustus_config_path = augustus_config_path+"config"
+           os.environ["AUGUSTUS_CONFIG_PATH"] = augustus_config_path
+           print ("AUGUSTUS_CONFIG_PATH set to "+augustus_config_path)
 
         # Do analysis
-        try:
-            shell("""
-            run_busco -c {threads} -i {input} -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
-            mv run_{ref_name} {output}
-            """)
-        except:
-            shell("""
-            run_BUSCO.py -c {threads} -i {input} -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
-            mv run_{ref_name} {output}
-            """)
+        shell("""
+        {busco_script} -c {threads} -i {input} -l {lineage} -o {ref_name} --tmp {folder}tmp -m {mode} -f | tee {log}
+        mv run_{ref_name} {output}
+        """)
 
         # Check if BUSCOs were found. If not kill the pipeline.
         shell("""
