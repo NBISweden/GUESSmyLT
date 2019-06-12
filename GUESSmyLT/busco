@@ -54,14 +54,4 @@ rule busco_ann:
         mv run_{ref_name} {output}
         """)
 
-        # Check if BUSCOs were found. If not kill the pipeline.
-        shell("""
-        if grep --quiet -P 'WARNING\tBUSCO did not find any match.' {log}; then
-            echo KILLING snakemake because no BUSCOs were found. Retry with a better reference. | tee -a {log}
-            killall snakemake
-        else
-            :
-        fi
-        """)
-
 # Have to move since since otherwise the busco config.ini file has to be changed for other output dir
