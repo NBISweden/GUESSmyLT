@@ -319,12 +319,12 @@ b.	Deinterleaves paired end read files if they are interleaved.
 
 ## External resources:
 
-[https://chipster.csc.fi/manual/library-type-summary.html](https://chipster.csc.fi/manual/library-type-summary.html)
-[https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)
-[http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html](http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html)
-[https://sailfish.readthedocs.io/en/master/library_type.html](https://sailfish.readthedocs.io/en/master/library_type.html)
-[https://rnaseq.uoregon.edu](https://rnaseq.uoregon.edu)
-[https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data](https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data)
+[https://chipster.csc.fi/manual/library-type-summary.html](https://chipster.csc.fi/manual/library-type-summary.html)  
+[https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)  
+[http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html](http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html)  
+[https://sailfish.readthedocs.io/en/master/library_type.html](https://sailfish.readthedocs.io/en/master/library_type.html)  
+[https://rnaseq.uoregon.edu](https://rnaseq.uoregon.edu)  
+[https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data](https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data)  
 
 ## Known issues
 1) Complains about gzip broken pipe when subsampling with compressed files (but works anyway).  
