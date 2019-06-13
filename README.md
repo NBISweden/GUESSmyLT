@@ -116,38 +116,37 @@ GUESSmyLT-example
 ## Result
 The results are printed as stdout and to a result file. One example of a result would be:
 ```bash
-Results of paired library inferring of reads 4_mapped_r1.sub.100000 on ref 4:
+Results of paired library inferred from reads:
 
-Library type    Reads     Percent     Vizualization according to firststrand
+   Library type    Relative orientation         Reads     Percent    Vizualization according to firststrand
 
-    fr_first     4019       47.2%     3' ----------<==1== 5'
-                                      5' ==2==>---------- 3'
-
-
-   fr_second     4454       52.3%     3' ----------<==2== 5'
-                                      5' ==1==>---------- 3'
+ ff_firststrand                matching             5        0.1%    3' <==2==----<==1== 5'
+                                                                     5' ---------------- 3'
 
 
-    rf_first       21        0.2%     3' ----------==1==> 5'
-                                      5' <==2==---------- 3'
+ff_secondstrand                matching             3        0.0%    3' ---------------- 5'
+                                                                     5' ==1==>----==2==> 3'
 
 
-   rf_second       19        0.2%     3' ----------==2==> 5'
-                                      5' <==1==---------- 3'
+ fr_firststrand                  inward          4167       47.7%    3' ----------<==1== 5'
+                                                                     5' ==2==>---------- 3'
 
 
-    ff_first        5        0.1%     3' ----------<==1== 5'
-                                      5' <==2==---------- 3'
+fr_secondstrand                  inward          4521       51.7%    3' ----------<==2== 5'
+                                                                     5' ==1==>---------- 3'
 
 
-   ff_second        2        0.0%     3' ----------==2==> 5'
-                                      5' ==1==>---------- 3'
+ rf_firststrand                 outward            19        0.2%    3' <==2==---------- 5'
+                                                                     5' ----------==1==> 3'
 
 
-   undecided        1        0.0%     3' -------??------- 5'
-                                      5' -------??------- 3'
+rf_secondstrand                 outward            23        0.3%    3' <==1==---------- 5'
+                                                                     5' ----------==2==> 3'
 
 
+      undecided                      NA             1        0.0%    3' -------??------- 5'
+                                                                     5' -------??------- 3'
+								     
 Roughly 50/50 split between the strands of the same library orientation should be interpreted as unstranded.
 
 ```
@@ -319,12 +318,12 @@ b.	Deinterleaves paired end read files if they are interleaved.
 
 ## External resources:
 
-[https://chipster.csc.fi/manual/library-type-summary.html](https://chipster.csc.fi/manual/library-type-summary.html)
-[https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)
-[http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html](http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html)
-[https://sailfish.readthedocs.io/en/master/library_type.html](https://sailfish.readthedocs.io/en/master/library_type.html)
-[https://rnaseq.uoregon.edu](https://rnaseq.uoregon.edu)
-[https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data](https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data)
+[https://chipster.csc.fi/manual/library-type-summary.html](https://chipster.csc.fi/manual/library-type-summary.html)  
+[https://galaxyproject.org/tutorials/rb_rnaseq/](https://galaxyproject.org/tutorials/rb_rnaseq/)  
+[http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html](http://onetipperday.sterding.com/2012/07/how-to-tell-which-library-type-to-use.html)  
+[https://sailfish.readthedocs.io/en/master/library_type.html](https://sailfish.readthedocs.io/en/master/library_type.html)  
+[https://rnaseq.uoregon.edu](https://rnaseq.uoregon.edu)  
+[https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data](https://www.researchgate.net/post/What_is_the_difference_between_strand-specific_and_not_strand-specific_RNA-seq_data)  
 
 ## Known issues
 1) Complains about gzip broken pipe when subsampling with compressed files (but works anyway).  
