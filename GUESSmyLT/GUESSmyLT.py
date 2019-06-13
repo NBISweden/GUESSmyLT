@@ -344,7 +344,7 @@ def main():
 
     # check BUSCO information i.e: type of reference: genome or transcriptome.
     busco_reference_mode = None
-    refname = None
+    refname = "assembly"
     lineage = None
     if not args.annotation:
         busco_reference_mode=check_mode(args.mode)
@@ -363,7 +363,6 @@ def main():
 
     # check annotation file
     if args.annotation:
-        print("Inputting annotation files not implemeted yet. Exiting...")
         check_annotation(args.annotation)
 
     # Update snakemake config file
@@ -393,9 +392,9 @@ def main():
 
     # Execute Snakemake
     if args.n:
-        os.system("snakemake -nps "+script_dir+"Snakefile -d "+args.output+" result_"+sample_name+"_on_"+refname+".txt --cores "+str(args.threads))
+        os.system("snakemake -nps "+script_dir+"Snakefile -d "+args.output+" result.txt --cores "+str(args.threads))
     else:
-        os.system("snakemake -s "+script_dir+"Snakefile -d "+args.output+" result_"+sample_name+"_on_"+refname+".txt --cores "+str(args.threads))
+        os.system("snakemake -s "+script_dir+"Snakefile -d "+args.output+" result.txt --cores "+str(args.threads))
 
 
 if __name__ == "__main__":

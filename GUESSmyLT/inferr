@@ -7,8 +7,7 @@ script_dir=os.path.dirname(__file__)
 configfile: "config.json"
 folder = "intermediate_data/"
 script_dir     = config["script_dir"]
-output_file = "result_"+config["name"]+"_on_"+config["reference_name"]+".txt"
-name = config["name"]
+output_file = "result.txt"
 reference_name = config["reference_name"]
 
 ## ---- find is PE or SE ----
@@ -62,8 +61,8 @@ rule inferr:
         type = get_type()
         shell("if(( `python --version 2>&1 | awk '{{print $2}}' | cut -d'.' -f1` >= 3 ));then \n \
                         echo \"call inferr_lib.py with python prefix\"; \n \
-                        python {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}; \n \
+                        python {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {reference_name} {output_file}; \n \
                 else \n \
                         echo \"call inferr_lib.py with python3 prefix\"; \n \
-                        python3 {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {name} {reference_name} {output_file}; \n \
+                        python3 {script_dir}/inferr_lib.py {input.annotation} {input.bam} {input.fastq} "+type+" {reference_name} {output_file}; \n \
                 fi")

@@ -110,7 +110,7 @@ def extract_genes(annotation, run_name):
     print("Number of genes extracted: %d\n" % (len(correct_genes.features)))
     return correct_genes
 
-def infer_paired_region(genes):
+def infer_paired_region_with(genes):
     '''
     Function for inferring paired library-type by looking at a regions corresponding to genes
     '''
@@ -131,53 +131,95 @@ def infer_paired_region(genes):
         start = int(gene.location.start)
         stop = int(gene.location.end)
         strand = gene.strand
-        reads = []
-       
+
         # Get reads mapped to a specific contig and in a sequence range
         # TODO: Look into optimizing this step, only take a subset (1000ish) reads? samfile.mate is not made for high throughput
         try:
             for read in samfile.fetch(contig, start, stop):
                 if not read.mate_is_unmapped and read.is_read1:
-                    reads.append([read, samfile.mate(read)])
+                    first = read
+                    second = samfile.mate(read)
+                    try:
+                        lib = ''
+                        if not first.is_reverse:
+                            lib += 'f'
+                        else:
+                            lib += 'r'
+                        if not second.is_reverse:
+                            lib += 'f'
+                        else:
+                            lib += 'r'
+                        # Gene on sense strand
+                        if strand == 1:
+                            if first.reference_start > second.reference_start:
+                                # Flip order of reads
+                                lib = lib[::-1]
+                                lib += '_first'
+                            elif first.reference_start < second.reference_start:
+                                lib += '_second'
+                            else:
+                                lib = 'undecided'
+                        # Gene on antisense
+                        elif strand == -1:
+                            if first.reference_start > second.reference_start:
+                                # Flip order of reads
+                                lib = lib[::-1]
+                                lib += '_second'
+                            elif first.reference_start < second.reference_start:
+                                lib += '_first'
+                            else:
+                                lib = 'undecided'
+                        libs[lib] += 1
+                    except: libs['undecided'] +=1 #Some reads missing start or end-values
         except ValueError as message:
-            print(message)
+            print(message)         
 
-        # Check lib-type of reads
-        for read in reads:
-            first = read[0]
-            second = read[1]
-            try:
-                lib = ''
-                if not first.is_reverse:
-                    lib += 'f'
-                else:
-                    lib += 'r'
-                if not second.is_reverse:
-                    lib += 'f'
-                else:
-                    lib += 'r'
-                # Gene on sense strand
-                if strand == 1:
+    return libs
+
+def infer_paired_region_without():
+    '''
+    Function for inferring paired library-type by looking at a regions corresponding to genes
+    '''
+    # Counters for the different lib-types
+    libs = {
+        'fr': 0,
+        'rf': 0,
+        'ff': 0,
+        'undecided0': 0
+    }
+
+    # Get reads 
+    # TODO: Look into optimizing this step, only take a subset (10000ish) reads? samfile.mate is not made for high throughput
+    try:
+        max_read=20000
+        count=0
+        print ("As no gene was found we focus only on "+str(max_read)+" first reads (both reads mapped)")
+        for read in samfile.fetch():       
+            if not read.mate_is_unmapped and read.is_read1:
+                count+=1
+                if count > max_read:
+                    break
+                first = read
+                second = samfile.mate(read)
+                try:
+                    lib = ''
+                    if not first.is_reverse:
+                        lib += 'f'
+                    else:
+                        lib += 'r'
+                    if not second.is_reverse:
+                        lib += 'f'
+                    else:
+                        lib += 'r'
                     if first.reference_start > second.reference_start:
                         # Flip order of reads
                         lib = lib[::-1]
-                        lib += '_first'
-                    elif first.reference_start < second.reference_start:
-                        lib += '_second'
-                    else:
-                        lib = 'undecided'
-                # Gene on antisense
-                elif strand == -1:
-                    if first.reference_start > second.reference_start:
-                        # Flip order of reads
-                        lib = lib[::-1]
-                        lib += '_second'
-                    elif first.reference_start < second.reference_start:
-                        lib += '_first'
-                    else:
-                        lib = 'undecided'
-                libs[lib] += 1
-            except: libs['undecided'] +=1 #Some reads missing start or end-values
+
+                    libs[lib] += 1
+                except: libs['undecided0'] +=1 #Some reads missing start or end-values               
+    except ValueError as message:
+        print(message)
+
     return libs
 
 def infer_single_region(genes):
@@ -185,7 +227,7 @@ def infer_single_region(genes):
     Function for inferring library type of single-ended library types
     r-library prediction not validated
     """
-
+    
     libs = {
         'f_first': 0,
         'f_second': 0,
@@ -206,83 +248,116 @@ def infer_single_region(genes):
         start = int(gene.location.start)
         stop = int(gene.location.end)
         strand = gene.strand
-        reads = []
+
         # Get reads mapped to a specific contig and in a sequence range
         for read in samfile.fetch(contig, start, stop):
             if not read.is_unmapped:
-                reads.append(read)
-
-        # Check lib-type of reads
-        for read in reads:
-            try:
-                flag = SequenceMatcher(None, og_reads[read.query_name], read.query_sequence).ratio() >= 0.8
-                lib = ''
-                if strand == 1:
-                    if flag and not read.is_reverse:
-                        lib += 'f_second'
-                    elif not flag and read.is_reverse:
-                        lib += 'f_first'
-                    elif flag and read.is_reverse:
-                        lib += 'r_second'
-                    elif not flag and not read.is_reverse:
-                        lib += 'r_first'
+                try:
+                    flag = SequenceMatcher(None, og_reads[read.query_name], read.query_sequence).ratio() >= 0.8
+                    lib = ''
+                    if strand == 1:
+                        if flag and not read.is_reverse:
+                            lib += 'f_second'
+                        elif not flag and read.is_reverse:
+                            lib += 'f_first'
+                        elif flag and read.is_reverse:
+                            lib += 'r_second'
+                        elif not flag and not read.is_reverse:
+                            lib += 'r_first'
+                        else:
+                            lib = 'undecided'
+                    elif strand == -1:
+                        if not flag and read.is_reverse:
+                            lib += 'f_second'
+                        elif flag and  not read.is_reverse:
+                            lib += 'f_first'
+                        elif flag and read.is_reverse:
+                            lib += 'r_first'
+                        elif not flag and  not read.is_reverse:
+                            lib += 'r_second'
+                        else:
+                            lib = 'undecided'
                     else:
                         lib = 'undecided'
-                elif strand == -1:
-                    if not flag and read.is_reverse:
-                        lib += 'f_second'
-                    elif flag and  not read.is_reverse:
-                        lib += 'f_first'
-                    elif flag and read.is_reverse:
-                        lib += 'r_first'
-                    elif not flag and  not read.is_reverse:
-                        lib += 'r_second'
-                    else:
-                        lib = 'undecided'
-                else:
-                    lib = 'undecided'
-                libs[lib] += 1
-            except: libs['undecided'] +=1 # Some reads missing start or end-values
+                    libs[lib] += 1
+                except: libs['undecided'] +=1 # Some reads missing start or end-values
     return libs
 
-def write_result(lib_dict):
+def write_result(lib_dict, state, genes):
     """
     Function for calculating precentages and writing results of inferring to resultfile.
     """
     lib_viz = {
-        'fr_first': ["3' ----------<==1== 5'","5' ==2==>---------- 3'" ],
-        'fr_second': ["3' ----------<==2== 5'", "5' ==1==>---------- 3'"],
-        'rf_first': ["3' ----------==1==> 5'","5' <==2==---------- 3'" ],
-        'rf_second': ["3' ----------==2==> 5'","5' <==1==---------- 3'" ],
-        'ff_first': ["3' ----------<==1== 5'","5' <==2==---------- 3'" ],
-        'ff_second': ["3' ----------==2==> 5'","5' ==1==>---------- 3'" ],
-        'f_first': ["3' ----------<==1== 5'","5' ---------------- 3'" ],
-        'f_second': ["3' ---------------- 5'","5' ==1==>---------- 3'" ],
-        'r_first': ["3' ----------==1==> 5'","5' ---------------- 3'" ],
-        'r_second': ["3' ---------------- 5'","5' <==1==---------- 3'" ],
-        'undecided': ["3' -------??------- 5'","5' -------??------- 3'" ]
+        'fr_first': ["fr_firststrand", "3' ----------<==1== 5'","5' ==2==>---------- 3'", "inward"],
+        'fr_second': ["fr_secondstrand", "3' ----------<==2== 5'", "5' ==1==>---------- 3'", "inward"],
+        'fr': ["fr", "----------<=====","=====>----------", "inward"],
+        'rf_first': ["rf_firststrand", "3' <==2==---------- 5'","5' ----------==1==> 3'", "outward"],
+        'rf_second': ["rf_secondstrand", "3' <==1==---------- 5'","5' ----------==2==> 3'", "outward"],
+        'rf': ["rf", "<=====----------","----------=====>" , "outward"],
+        'ff_first': ["ff_firststrand", "3' <==2==----<==1== 5'","5' ---------------- 3'", "matching"],
+        'ff_second': ["ff_secondstrand", "3' ---------------- 5'","5' ==1==>----==2==> 3'", "matching"],
+        'ff': ["ff", "<=====----<=====","", "matching"],
+        'f_first': ["f_firststrand", "3' ----------<==1== 5'","5' ---------------- 3'" ],
+        'f_second': ["f_secondstrand", "3' ---------------- 5'","5' ==1==>---------- 3'" ],
+        'r_first': ["r_firststrand", "3' ----------==1==> 5'","5' ---------------- 3'" ],
+        'r_second': ["r_secondstrand", "3' ---------------- 5'","5' <==1==---------- 3'" ],
+        'undecided0': ["undecided", "-------??-------","-------??-------", "NA"],
+        'undecided': ["undecided", "3' -------??------- 5'","5' -------??------- 3'", "NA" ]
     }
     output = open(output_file, 'w+')
-    output.write("Results of %s library inferring of reads %s on ref %s: \n\nLibrary type    Reads     Percent     Vizualization according to firststrand\n" % (state, run_name, reference))
-    print("Results of %s library inferring of reads %s on ref %s: \n\nLibrary type    Reads     Percent     Vizualization according to firststrand\n" % (state, run_name, reference))
-
-    total_reads = 0
-    for i in lib_dict:
-        total_reads += lib_dict[i]
-    max_len = max(8, len(str(total_reads)))
-    max_len2 = 52+max_len
-    if total_reads > 0:
-        for i in sorted(lib_dict):
-            percent = '{:.1%}'.format(lib_dict[i]/total_reads)
-            output.write("%12s %*d %11s %26s\n%*s\n\n" % (i, max_len, lib_dict[i], percent, lib_viz[i][0], max_len2, lib_viz[i][1]))
-            print("%12s %*d %11s %26s\n%*s\n\n" % (i, max_len, lib_dict[i], percent, lib_viz[i][0], max_len2, lib_viz[i][1]))
+     # --------- Print GENERAL message ----------
+    if state=='single' and not len(genes.features) > 0: #stop here nothing to do
+        output.write("Sorry but without any gene and with single end reads, we cannot infer anything.")
+        print ("Sorry but without any gene and with single end reads, we cannot infer anything.")
     else:
-        for i in sorted(lib_dict):
-            output.write("%12s %*d %11s %26s\n%*s\n\n" % (i, max_len, 0, 0, lib_viz[i][0], max_len2, lib_viz[i][1]))
-            print("%12s %*d %11s %26s\n%*s\n\n" % (i, max_len, 0, 0, lib_viz[i][0], max_len2, lib_viz[i][1]))
-    output.write("Roughly 50/50 split between the strands of the same library orientation should be interpreted as unstranded.")
-    print("Roughly 50/50 split between the strands of the same library orientation should be interpreted as unstranded.")
+        output.write("Results of %s library inferred from reads: \n\n" % (state))
+        print("Results of %s library inferred from reads: \n\n" % (state))
 
+        # --------- Print HEADER ----------
+        #paired vs single => relative orientation column
+        # paired without gene vs paired with gene => 
+        if 'fr' in lib_dict: # paired without gene Vizualization according to firststrand or not
+            output.write("{:>15}    {:>20}    {:>10}    {:>8}    {:>}\n".format("Library type","Relative orientation","Reads","Percent","Vizualization"))
+            print ('{:>15}    {:>20}    {:>10}    {:>8}    {:>}\n'.format("Library type","Relative orientation","Reads","Percent","Vizualization"))
+        elif 'fr_first' in lib_dict: # paired with gene
+            output.write("{:>15}    {:>20}    {:>10}    {:>8}    {:>20}\n".format("Library type","Relative orientation","Reads","Percent","Vizualization according to firststrand"))
+            print ('{:>15}    {:>20}    {:>10}    {:>8}    {:>20}\n'.format("Library type","Relative orientation","Reads","Percent","Vizualization according to firststrand"))
+        else:#single end
+            output.write("{:>15}    {:>10}    {:>8}    {:>20}\n".format("Library type","Reads","Percent","Vizualization according to firststrand"))
+            print("{:>15}    {:>10}    {:>8}    {:>20}\n".format("Library type","Reads","Percent","Vizualization according to firststrand"))
+
+
+        # --------- Print VALUES ----------
+        total_reads = 0
+        for i in lib_dict:
+            total_reads += lib_dict[i]
+
+        for i in sorted(lib_dict):
+            percent = "0%"
+            if total_reads > 0:
+                percent = '{:.1%}'.format(lib_dict[i]/total_reads)
+            if 'fr' in lib_dict : #paired end
+                output.write("{:>15}    {:>20}    {:>10}    {:>8}    {:>}\n{:>85}\n\n".format(lib_viz[i][0], lib_viz[i][3], lib_dict[i], percent, lib_viz[i][1], lib_viz[i][2]))
+                print ('{:>15}    {:>20}    {:>10}    {:>8}    {:>}\n{:>85}\n\n'.format(lib_viz[i][0], lib_viz[i][3], lib_dict[i], percent, lib_viz[i][1], lib_viz[i][2]))
+            elif 'fr_first' in lib_dict: #paired end
+                output.write("{:>15}    {:>20}    {:>10}    {:>8}    {:>}\n{:>91}\n\n".format(lib_viz[i][0], lib_viz[i][3], lib_dict[i], percent, lib_viz[i][1], lib_viz[i][2]))
+                print ('{:>15}    {:>20}    {:>10}    {:>8}    {:>}\n{:>91}\n\n'.format(lib_viz[i][0], lib_viz[i][3], lib_dict[i], percent, lib_viz[i][1], lib_viz[i][2]))
+            else: #single end
+                output.write("{:>15}    {:>10}    {:>8}    {:>20}\n{:>67}\n\n".format(lib_viz[i][0], lib_dict[i], percent, lib_viz[i][1], lib_viz[i][2]))
+                print ('{:>15}    {:>10}    {:>8}    {:>20}\n{:>67}\n\n'.format(lib_viz[i][0], lib_dict[i], percent, lib_viz[i][1], lib_viz[i][2]))
+                
+
+        if 'fr' in lib_dict:
+            output.write("Sorry but without annotated gene we cannot stand which strand is the referential (*_firststrand / *_secondstrand).\nYou cannot guess neither if the library is stranded or unstranded, we can only observe the relative orientation of reads between pairs.\n")
+            print ("Sorry but without annotated gene we cannot stand which strand is the referential (*_firststrand / *_secondstrand).\nYou cannot guess neither if the library is stranded or unstranded, we can only observe the relative orientation of reads between pairs.\n")
+        else:
+            output.write("Roughly 50/50 split between the strands of the same library orientation should be interpreted as unstranded.")
+            print("Roughly 50/50 split between the strands of the same library orientation should be interpreted as unstranded.")
+
+
+
+
+# -----------------------------
 # ---------- RUNNING ----------
 print (sys.argv)
 annotation = sys.argv[1]
@@ -290,21 +365,25 @@ bam = sys.argv[2]
 read_path = sys.argv[3]
 state = sys.argv[4]
 run_name = sys.argv[5]
-reference = sys.argv[6]
-output_file = sys.argv[7]
+output_file = sys.argv[6]
 
 samfile = pysam.AlignmentFile(bam, "rb")
 
 print("Extracting genes...")
-genes = extract_genes(annotation, reference)
+genes = extract_genes(annotation, run_name)
+result=None
 
 if state == 'single':
-    print("Running single end inferring")
-    result = infer_single_region(genes)
+    print("Running single end reads inference")
+    if len(genes.features) > 0:       
+        result = infer_single_region(genes)
 elif state == 'paired':
-    print("Running paired end inferring")
-    result = infer_paired_region(genes)
+    print("Running paired end reads inference")
+    if len(genes.features) > 0:
+        result = infer_paired_region_with(genes)
+    else:
+        result = infer_paired_region_without()
 
-print("Prediction finished:\n")
-write_result(result)
+print("Inference finished\n")
+write_result(result, state, genes)
 print("\nResults also written to file " + output_file )
