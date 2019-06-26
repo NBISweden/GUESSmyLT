@@ -1,11 +1,13 @@
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/guessmylt/README.html)
+
 # GUESSmyLT
 Software to guess the RNA-Seq library type of paired and single end read files using mapping and gene annotation.  
 
 ## Table of contents
 
 * [Background](#background)
-* [Dependencies](#Dependencies)
-* [Installation](#Installation)
+* [Dependencies](#dependencies)
+* [Installation](#installation)
   * [Installation with conda](#installation-with-conda)
   * [Installation with pip](#installation-with-pip)
   * [Installation with git](#installation-with-git)
@@ -27,7 +29,7 @@ Software to guess the RNA-Seq library type of paired and single end read files u
   * [Output](#output)
   * [Parameters](#parameters)
 * [Overview of the pipeline](#overview-of-the-pipeline)
-* [Overview of the different library types](#Overview-of-the-different-library-types)
+* [Overview of the different library types](#overview-of-the-different-library-types)
 * [Library prep methods](#library-prep-methods)
 * [External resources](#external-resources)
 * [Known issues](#known-issues)
@@ -57,10 +59,12 @@ Others:
 
 ## Installation  
 
-#### Installation with conda (in preparation): 
+#### Installation with conda:  
+
+With an activated Bioconda channel [(see 2. Set up channels)](https://bioconda.github.io/index.html#set-up-channels), install with:
 
 ```bash
-
+conda install guessmylt
 ```
 
 #### Installation with pip:  
