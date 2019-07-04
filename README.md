@@ -1,4 +1,6 @@
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/guessmylt/README.html)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3268394.svg)](https://doi.org/10.5281/zenodo.3268394)
+[![PyPI version](https://badge.fury.io/py/guessmylt.svg)](https://badge.fury.io/py/guessmylt)
 
 # GUESSmyLT
 Software to guess the RNA-Seq library type of paired and single end read files using mapping and gene annotation.  
