@@ -1,4 +1,6 @@
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/guessmylt/README.html)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3268394.svg)](https://doi.org/10.5281/zenodo.3268394)
+[![PyPI version](https://badge.fury.io/py/guessmylt.svg)](https://badge.fury.io/py/guessmylt)
 
 # GUESSmyLT
 Software to guess the RNA-Seq library type of paired and single end read files using mapping and gene annotation.  
@@ -37,7 +39,7 @@ Software to guess the RNA-Seq library type of paired and single end read files u
 * [Citation](#citation)
 
 ## Background
-The choice of RNA-Seq library type defines the read orientation of the sequencing and the order in which the strands of cDNA are sequenced, which means that RNA-Seq reads from different library types can differ significantly. The information regarding library type can be very useful for reads to be assembled into a transcriptome or mapped to a reference assembly. This is because the library type can help to discern where in the transcriptome shorter ambiguous reads belong by using the read’s relative orientation and from which strand it was sequenced. Unfortunately, this information regarding the library type used is not included in sequencing output files and is usually lost before the assembly of the data. Even when working with RNA-Seq data from public repositories there is no guarantee that the library type information is correct or that it exists at all. This is what GUESSmyLT aims to fix by looking at how reads map to a reference and together with gene annotation guess which library was used to generate the data.
+The choice of RNA-Seq library type defines the read orientation of the sequencing and the order in which the strands of cDNA are sequenced, which means that RNA-Seq reads from different library types can differ significantly. The information regarding library type can be very useful for reads to be assembled into a transcriptome or mapped to a reference assembly. This is because the library type can help to discern where in the transcriptome shorter ambiguous reads belong by using the read’s relative orientation and from which strand it was sequenced. Unfortunately, this information regarding the library type used is not included in sequencing output files and may be lost before the assembly of the data. Even when working with RNA-Seq data from public repositories there is no guarantee that the library type information is correct or that it exists at all. This is what GUESSmyLT aims to fix by looking at how reads map to a reference and together with gene annotation guess which library was used to generate the data.
 
 ## Dependencies:  
 Developed for Unix systems. Depending installation approach more or less dependencies will be installed automatically. Check the installation paragraph.
