@@ -5,15 +5,15 @@ tags:
   - RNA-seq
   - library-type
 authors:
-  - name: Berner Wik E.
+  - name: Erik Berner Wik
     affiliation: 1
-  - name: Olin H.
+  - name: Hampus Olin
     affiliation: 1
-  - name: Vigetun Haughey C.
+  - name: Caitlin Vigetun Haughey
     affiliation: 1
-  - name: Klasson L.
+  - name: Lisa Klasson 
     affiliation: 1
-  - name: Dainat J.
+  - name: Jacques Dainat
     orcid: 0000-0002-6629-0173
     affiliation: "2, 3"
 affiliations:
