@@ -1,4 +1,5 @@
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/guessmylt/README.html)
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.01344/status.svg)](https://doi.org/10.21105/joss.01344)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3268394.svg)](https://doi.org/10.5281/zenodo.3268394)
 [![PyPI version](https://badge.fury.io/py/guessmylt.svg)](https://badge.fury.io/py/guessmylt)
 
@@ -346,8 +347,8 @@ export AUGUSTUS_CONFIG_PATH=~/miniconda3/pkgs/augustus-3.2.3-boost1.60_0/config
 	* Look more into why some reads get undecided orientation. This is when a read's mate cannot be found and is probably due to a read is at the end of a gene and its mate is outside of the selected region.  
 
 ## Citation
-If you use GUESSmyLT in your work, please cite us.
-DOI will come soon
+If you use GUESSmyLT in your work, please cite us:  
+[![DOI](http://joss.theoj.org/papers/10.21105/joss.01344/status.svg)](https://doi.org/10.21105/joss.01344)
 
 ## Author
 Berner Wik E.<sup>\*,1</sup>, Olin H.<sup>\*,1</sup>, Vigetun Haughey C.<sup>\*,1</sup>, Lisa Klasson<sup>1</sup>, Jacques Dainat<sup>2,3</sup> 
@@ -356,4 +357,3 @@ Berner Wik E.<sup>\*,1</sup>, Olin H.<sup>\*,1</sup>, Vigetun Haughey C.<sup>\*,
 <sup>1</sup>Molecular Evolution, Department of Cell and Molecular Biology, Uppsala University, 75124 Sweden.</br>
 <sup>2</sup>National Bioinformatics Infrastructure Sweden (NBIS), SciLifeLab, Uppsala Biomedicinska Centrum (BMC), Husargatan 3, S-751 23 Uppsala, SWEDEN.</br>
 <sup>3</sup>IMBIM - Department of Medical Biochemistry and Microbiology, Box 582, S-751 23 Uppsala, SWEDEN.</br>
-
