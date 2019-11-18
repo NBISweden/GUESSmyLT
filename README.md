@@ -277,10 +277,10 @@ Results from intermediate steps, such as the mapping from Bowtie2 or annotation 
 | --subsample | Even integer | Number of reads that will be used for subsampling. |
 | --reference | .fa file | Full paths to reference genome/transcriptome for mapping reads to (nucleotide fasta file). |
 | --mode | genome or transcriptome | When no annotation is provided, tells the programm if the reference fasta file has to be considered as a genome or a transcriptome in order to use BUSCO properly. |
-| --threads | Integer | Number of threads to use. |
-| --memory | Number of GB ex: 10G | Maximum memory that can be used in GB. |
-| --annotation | .gff file | Full path to annotation file for skipping BUSCO step. NOT DEVELOPED YET. |
-| --mapped | Sorted .bam file | Full path to mapped read file for skipping Bowtie2 step. NOT DEVELOPED YET. |
+| --threads | Integer | Number of threads to use. (default 2)|
+| --memory | Number of GB ex: 10G | Maximum memory that can be used in GB. (default 8G) |
+| --annotation | .gff file | Full path to annotation file for skipping BUSCO step. |
+| --mapped | Sorted .bam file | Full path to mapped read file for skipping Bowtie2 step. |
 | --output | File path | Full path to result file. If left out files will be written to working directory. |
 
 ## Overview of the pipeline
