@@ -2,6 +2,8 @@
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01344/status.svg)](https://doi.org/10.21105/joss.01344)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3268394.svg)](https://doi.org/10.5281/zenodo.3268394)
 [![PyPI version](https://badge.fury.io/py/guessmylt.svg)](https://badge.fury.io/py/guessmylt)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/guessmylt/badges/downloads.svg)](https://anaconda.org/bioconda/guessmylt)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/guessmylt/badges/license.svg)](https://anaconda.org/bioconda/guessmylt)
 
 # GUESSmyLT
 Software to guess the RNA-Seq library type of paired and single end read files using mapping and gene annotation.  
