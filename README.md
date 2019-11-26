@@ -1,4 +1,5 @@
 [![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/guessmylt/README.html)
+[<img alt="docker_guessmylt" src="https://quay.io/repository/biocontainers/guessmylt/status">](https://quay.io/repository/biocontainers/guessmylt)
 [![DOI](http://joss.theoj.org/papers/10.21105/joss.01344/status.svg)](https://doi.org/10.21105/joss.01344)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3268394.svg)](https://doi.org/10.5281/zenodo.3268394)
 [![PyPI version](https://badge.fury.io/py/guessmylt.svg)](https://badge.fury.io/py/guessmylt)
