@@ -344,8 +344,7 @@ export AUGUSTUS_CONFIG_PATH=~/miniconda3/pkgs/augustus-3.2.3-boost1.60_0/config
 3) BUSCO might not find any core genes. Fix by using more reads or by providing reference.  
 4) Mapping, annotation, assembly or the entire pipeline is skipped.  This is most likely due to the fact that Snakemake checks which output files need to be generated and from there only performs the necessary steps of the pipeline. The result of this is that is you already have a .bam file, BUSCO/Trinity output folder or a result .txt file for the reads Snakemake will skip steps  
 5) Installing Trinity for mac via Conda will give you a version from 2011 that doesn't work. Install using Homebrew instead.
-## TO DO
-	* Make BIOCONDA package for easy access. (Maybe snakemakes --use-conda)  
+## TO DO 
 	* Add Travis using example data provided as reference.  
 	* Look more into why some reads get undecided orientation. This is when a read's mate cannot be found and is probably due to a read is at the end of a gene and its mate is outside of the selected region.  
 
