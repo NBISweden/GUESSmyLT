@@ -14,6 +14,8 @@ Software to guess the RNA-Seq library type of paired and single end read files u
 * [Background](#background)
 * [Dependencies](#dependencies)
 * [Installation](#installation)
+  * [Using Docker](#using-docker)
+  * [Using Singularity](#using-singularity)
   * [Installation with conda](#installation-with-conda)
   * [Installation with pip](#installation-with-pip)
   * [Installation with git](#installation-with-git)
@@ -64,6 +66,30 @@ Others:
   - Prokaryote and eukaryote BUSCO datasets (from https://busco.ezlab.org) included in the package.
 
 ## Installation  
+
+#### Using Docker
+
+First you must have [Docker](https://docs.docker.com/get-docker/) installed and running.  
+Secondly have look at the availabe GUESSmyLT biocontainers at [quay.io](https://quay.io/repository/biocontainers/guessmylt).  
+Then:
+  ```
+# get the chosen GUESSmyLT container version
+docker pull quay.io/biocontainers/guessmylt:0.2.5--py_0
+# run GUESSmyLT
+docker run quay.io/biocontainers/guessmylt:0.2.5--py_0 GUESSmyLT
+  ```
+
+#### Using Singularity
+
+First you must have [Singularity](https://sylabs.io/guides/3.5/user-guide/quick_start.html) installed and running.
+Secondly have look at the availabe GUESSmyLT biocontainers at [quay.io](https://quay.io/repository/biocontainers/guessmylt).  
+Then:
+```
+# get the chosen GUESSmyLT container version
+singularity pull docker://quay.io/biocontainers/guessmylt:0.2.5--py_0 
+# run the container
+singularity run guessmylt_0.2.5--pl5262hdfd78af_0.sif
+```
 
 #### Installation with conda:  
 
